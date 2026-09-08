@@ -24,10 +24,14 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+          
+      - name: Configure Repox authentication
+        uses: SonarSource/ci-github-actions/config-npm@v1
+        # Optional only if the default is wrong for this repo:
+        # with:
+        #   artifactory-reader-role: private-reader
 
       - name: Install Dependencies
-        env:
-          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
         run: bun install
 
       - name: Run Tests and Generate Coverage
