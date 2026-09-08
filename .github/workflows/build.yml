@@ -8,6 +8,10 @@ on:
 
 jobs:
   sonarqube:
+    permissions:
+      id-token: write
+      contents: write
+  
     name: SonarQube
     runs-on: ubuntu-latest
     steps:
