@@ -26,6 +26,8 @@ jobs:
           bun-version: latest
 
       - name: Install Dependencies
+        env:
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
         run: bun install
 
       - name: Run Tests and Generate Coverage
