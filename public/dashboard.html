@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Kudos Portal</title>
+  <link rel="stylesheet" href="/css/material.css">
+</head>
+<body>
+  <div class="top-app-bar">
+    <h1>Kudos Portal</h1>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/kudos">Kudos</a>
+      <a href="/feedback">Feedback</a>
+      <span id="admin-link"></span>
+      <div class="user-info">
+        <span class="user-info-name" id="user-name"></span>
+        <button class="button button-text" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h2>Welcome to Kudos Portal</h2>
+    <p style="margin-bottom: 24px; color: var(--md-sys-color-on-surface-variant);">
+      Your one-stop shop for employee recognition and feedback.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px;">
+      <div class="card">
+        <div class="card-title" style="font-size: 20px; margin-bottom: 12px;">✨ Give Kudos</div>
+        <div class="card-content">
+          Recognize your colleagues for their great work and contributions.
+        </div>
+        <a href="/kudos" class="button">Go to Kudos</a>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="font-size: 20px; margin-bottom: 12px;">💬 Submit Feedback</div>
+        <div class="card-content">
+          Share your thoughts and suggestions to help improve our workplace.
+        </div>
+        <a href="/feedback" class="button">Go to Feedback</a>
+      </div>
+
+      <div class="card" id="admin-card" style="display: none;">
+        <div class="card-title" style="font-size: 20px; margin-bottom: 12px;">⚙️ Admin Dashboard</div>
+        <div class="card-content">
+          Manage users and view all feedback submissions.
+        </div>
+        <a href="/admin" class="button">Go to Admin</a>
+      </div>
+    </div>
+
+    <div id="user-info-section"></div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script>
+    async function loadDashboard() {
+      const user = await checkAuth();
+      if (!user) return;
+
+      document.getElementById('user-name').textContent = user.name;
+
+      if (user.role === 'HR_ADMIN') {
+        document.getElementById('admin-link').innerHTML = '<a href="/admin">Admin</a>';
+        document.getElementById('admin-card').style.display = 'block';
+      }
+
+      const infoSection = document.getElementById('user-info-section');
+      infoSection.innerHTML = `
+        <div class="card">
+          <div class="card-title">Your Profile</div>
+          <div class="card-content">
+            <p><strong>Name:</strong> ${user.name}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Role:</strong> ${user.role.replace('_', ' ')}</p>
+            <p><strong>Department:</strong> ${user.department}</p>
+            <p><strong>Status:</strong> ${user.is_active ? 'Active' : 'Inactive'}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    async function logout() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+      window.location.href = '/';
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

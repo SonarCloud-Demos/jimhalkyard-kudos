@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kudos - Kudos Portal</title>
+  <link rel="stylesheet" href="/css/material.css">
+</head>
+<body>
+  <div class="top-app-bar">
+    <h1>Kudos</h1>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/kudos">Kudos</a>
+      <a href="/feedback">Feedback</a>
+      <span id="admin-link"></span>
+      <div class="user-info">
+        <span class="user-info-name" id="user-name"></span>
+        <button class="button button-text" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h2>Public Kudos Feed</h2>
+    <p style="margin-bottom: 24px; color: var(--md-sys-color-on-surface-variant);">
+      Celebrate your colleagues' achievements and great work.
+    </p>
+
+    <div id="kudos-list"></div>
+  </div>
+
+  <button class="fab" onclick="openModal()">+</button>
+
+  <div id="kudos-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Give Kudos</div>
+      <div id="modal-error"></div>
+
+      <form id="kudos-form">
+        <div class="form-group">
+          <label class="form-label" for="recipient">Recipient</label>
+          <select id="recipient" class="input-field" required>
+            <option value="">Select a colleague...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea id="message" class="input-field" placeholder="Say something nice..." required></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button button-text" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="button">Submit Kudos</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/kudos.js"></script>
+</body>
+</html>

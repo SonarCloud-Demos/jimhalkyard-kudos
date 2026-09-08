@@ -1,0 +1,20 @@
+{
+  "name": "kudos-portal",
+  "version": "1.0.0",
+  "description": "Internal Employee Feedback & Kudos Portal",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "seed": "bun run scripts/seed.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "hono": "^4.13.7",
+    "jose": "^6.2.12",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.13"
+  }
+}

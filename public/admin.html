@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Kudos Portal</title>
+  <link rel="stylesheet" href="/css/material.css">
+</head>
+<body>
+  <div class="top-app-bar">
+    <h1>Admin Dashboard</h1>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/kudos">Kudos</a>
+      <a href="/feedback">Feedback</a>
+      <a href="/admin">Admin</a>
+      <div class="user-info">
+        <span class="user-info-name" id="user-name"></span>
+        <button class="button button-text" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h2>User Management</h2>
+    <p style="margin-bottom: 24px; color: var(--md-sys-color-on-surface-variant);">
+      Manage user accounts and permissions.
+    </p>
+
+    <div id="users-table"></div>
+
+    <h2 style="margin-top: 48px;">All Feedback</h2>
+    <p style="margin-bottom: 24px; color: var(--md-sys-color-on-surface-variant);">
+      View all feedback submissions including anonymous authors.
+    </p>
+
+    <div id="feedback-list"></div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

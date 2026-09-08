@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kudos Portal - Login</title>
+  <link rel="stylesheet" href="/css/material.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>Kudos Portal</h1>
+      <p>Internal Employee Feedback & Recognition</p>
+    </div>
+
+    <div id="error-message"></div>
+    <div id="success-message"></div>
+
+    <div class="login-tabs">
+      <div class="login-tab active" onclick="showTab('login')">Login</div>
+      <div class="login-tab" onclick="showTab('register')">Register</div>
+    </div>
+
+    <form id="login-form" class="login-form active">
+      <div class="form-group">
+        <label class="form-label" for="login-email">Email</label>
+        <input type="email" id="login-email" class="input-field" placeholder="you@company.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">Password</label>
+        <input type="password" id="login-password" class="input-field" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="button" style="width: 100%;">Login</button>
+    </form>
+
+    <form id="register-form" class="login-form">
+      <div class="form-group">
+        <label class="form-label" for="register-name">Full Name</label>
+        <input type="text" id="register-name" class="input-field" placeholder="John Doe" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="register-email">Email</label>
+        <input type="email" id="register-email" class="input-field" placeholder="you@company.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="register-password">Password</label>
+        <input type="password" id="register-password" class="input-field" placeholder="At least 8 characters" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="register-department">Department</label>
+        <input type="text" id="register-department" class="input-field" placeholder="e.g., Engineering, Marketing" required>
+      </div>
+
+      <button type="submit" class="button" style="width: 100%;">Register</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--md-sys-color-on-surface-variant);">
+      <p>Demo credentials:</p>
+      <p>Employee: alice@company.com / employee123</p>
+      <p>Manager: diana@company.com / manager123</p>
+      <p>HR Admin: frank@company.com / hradmin123</p>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      const loginTab = document.querySelectorAll('.login-tab')[0];
+      const registerTab = document.querySelectorAll('.login-tab')[1];
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+
+      if (tab === 'login') {
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+      } else {
+        loginTab.classList.remove('active');
+        registerTab.classList.add('active');
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+      }
+
+      clearMessages();
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error-message');
+      errorDiv.innerHTML = `<div class="alert alert-error">${message}</div>`;
+      setTimeout(() => errorDiv.innerHTML = '', 5000);
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.getElementById('success-message');
+      successDiv.innerHTML = `<div class="alert alert-success">${message}</div>`;
+      setTimeout(() => successDiv.innerHTML = '', 5000);
+    }
+
+    function clearMessages() {
+      document.getElementById('error-message').innerHTML = '';
+      document.getElementById('success-message').innerHTML = '';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showSuccess('Login successful! Redirecting...');
+          setTimeout(() => window.location.href = '/dashboard', 1000);
+        } else {
+          showError(data.error || 'Login failed');
+        }
+      } catch (error) {
+        showError('Network error. Please try again.');
+      }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const department = document.getElementById('register-department').value;
+
+      try {
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, department }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showSuccess('Registration successful! Redirecting...');
+          setTimeout(() => window.location.href = '/dashboard', 1000);
+        } else {
+          showError(data.error || 'Registration failed');
+        }
+      } catch (error) {
+        showError('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

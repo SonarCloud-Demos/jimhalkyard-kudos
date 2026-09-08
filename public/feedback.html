@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback - Kudos Portal</title>
+  <link rel="stylesheet" href="/css/material.css">
+</head>
+<body>
+  <div class="top-app-bar">
+    <h1>Feedback</h1>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/kudos">Kudos</a>
+      <a href="/feedback">Feedback</a>
+      <span id="admin-link"></span>
+      <div class="user-info">
+        <span class="user-info-name" id="user-name"></span>
+        <button class="button button-text" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h2>Feedback Inbox</h2>
+    <p style="margin-bottom: 24px; color: var(--md-sys-color-on-surface-variant);">
+      View and submit feedback based on your role and permissions.
+    </p>
+
+    <div id="feedback-list"></div>
+  </div>
+
+  <button class="fab" onclick="openModal()">+</button>
+
+  <div id="feedback-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Submit Feedback</div>
+      <div id="modal-error"></div>
+
+      <form id="feedback-form">
+        <div class="form-group">
+          <label class="form-label" for="target-department">Target Department</label>
+          <input type="text" id="target-department" class="input-field" placeholder="e.g., Engineering, Marketing" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea id="message" class="input-field" placeholder="Share your feedback..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Visibility</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="public" name="visibility" value="PUBLIC" required>
+              <label for="public">Public - Everyone can see</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="manager-only" name="visibility" value="MANAGER_ONLY" required>
+              <label for="manager-only">Manager Only - Only managers of this department</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="hr-only" name="visibility" value="HR_ONLY" required>
+              <label for="hr-only">HR Only - HR administrators only</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="is-anonymous">
+          <label for="is-anonymous">Submit anonymously</label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button button-text" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="button">Submit Feedback</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/feedback.js"></script>
+</body>
+</html>
