@@ -37,7 +37,7 @@ jobs:
           bun-version: latest
           
       - name: Normalize bun.lock files to use public registry
-        run: bash scripts/normalize-bun-lock-registry.sh
+        run: bash scripts/normalize-bun-lock-registry.sh .
         
       - name: Install Dependencies
         run: bun install
