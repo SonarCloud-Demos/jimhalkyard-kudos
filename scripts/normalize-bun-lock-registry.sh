@@ -33,6 +33,7 @@ for dir in "${DIRS[@]}"; do
     echo "normalize-bun-lock-registry: directory not found: ${workdir}" >&2
     exit 1
   fi
+
   rm -f "${workdir}/.npmrc"
   rewrite_lock "${workdir}/bun.lock"
 done
