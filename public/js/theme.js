@@ -16,6 +16,15 @@ let currentPreference = null;
 let systemPreference = null;
 
 /**
+ * Normalize a stored/incoming preference value to a valid theme
+ * @param {string} value - Candidate preference value
+ * @returns {string} A valid THEMES value
+ */
+function normalizePreference(value) {
+  return Object.values(THEMES).includes(value) ? value : THEMES.SYSTEM;
+}
+
+/**
  * Get the system's preferred color scheme
  * @returns {string} 'dark' or 'light'
  */
@@ -33,7 +42,7 @@ function initTheme() {
 
   // Load saved preference or default to system
   try {
-    currentPreference = localStorage.getItem(THEME_KEY) || THEMES.SYSTEM;
+    currentPreference = normalizePreference(localStorage.getItem(THEME_KEY));
   } catch (e) {
     console.warn('Failed to read theme preference from localStorage:', e);
     currentPreference = THEMES.SYSTEM;
@@ -148,7 +157,7 @@ function watchStorageChanges() {
   window.addEventListener('storage', (e) => {
     // Only respond to theme preference changes
     if (e.key === THEME_KEY && e.newValue !== currentPreference) {
-      currentPreference = e.newValue || THEMES.SYSTEM;
+      currentPreference = normalizePreference(e.newValue);
       applyTheme(getEffectiveTheme());
 
       // Notify UI of change
@@ -191,6 +200,21 @@ function initThemeToggle() {
       options.forEach(opt => {
         opt.setAttribute('aria-checked', opt === option ? 'true' : 'false');
       });
+    });
+  });
+
+  // Add arrow-key navigation with a roving tabindex
+  const list = Array.from(options);
+  list.forEach(option => {
+    option.tabIndex = option.getAttribute('aria-checked') === 'true' ? 0 : -1;
+    option.addEventListener('keydown', (event) => {
+      const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
+        : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
+      if (!step) return;
+      event.preventDefault();
+      const next = list[(list.indexOf(option) + step + list.length) % list.length];
+      next.focus();
+      next.click();
     });
   });
 

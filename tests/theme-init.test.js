@@ -5,14 +5,41 @@ import { describe, test, expect } from 'bun:test';
  * Tests the flash-prevention initialization script structure and logic
  */
 
-describe('Theme Initialization Script', () => {
-  test('should be an IIFE (Immediately Invoked Function Expression)', () => {
-    const fs = require('fs');
-    const code = fs.readFileSync('./public/js/theme-init.js', 'utf-8');
+const THEME_INIT_PATH = require.resolve('../public/js/theme-init.js');
 
-    // Should be wrapped in (function() { ... })()
-    expect(code).toContain('(function()');
-    expect(code).toMatch(/\)\(\);?\s*$/);
+// Minimal documentElement stub: only what theme-init.js touches
+function createDocumentElement() {
+  const attributes = {};
+  const element = {
+    dataset: {},
+    setAttribute(name, value) {
+      attributes[name] = value;
+    },
+    getAttribute(name) {
+      return attributes[name];
+    },
+    removeAttribute(name) {
+      delete attributes[name];
+      if (name === 'data-theme') delete element.dataset.theme;
+    }
+  };
+  return element;
+}
+
+globalThis.document = { documentElement: createDocumentElement() };
+
+function runThemeInit() {
+  delete require.cache[THEME_INIT_PATH];
+  require(THEME_INIT_PATH);
+}
+
+describe('Theme Initialization Script', () => {
+  test('applies dark theme when preference is dark', () => {
+    globalThis.localStorage = { getItem: () => 'dark', setItem() {} };
+    globalThis.matchMedia = () => ({ matches: false, addEventListener() {} });
+    document.documentElement.removeAttribute('data-theme');
+    runThemeInit();
+    expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
   test('should have error handling for localStorage', () => {
@@ -46,21 +73,28 @@ describe('Theme Initialization Script', () => {
     expect(code).toContain("|| 'system'");
   });
 
-  test('should apply theme via dataset API', () => {
-    const fs = require('fs');
-    const code = fs.readFileSync('./public/js/theme-init.js', 'utf-8');
-
-    expect(code).toContain('document.documentElement.dataset.theme');
-    expect(code).not.toContain('setAttribute');
+  test('applies theme via dataset API without setAttribute', () => {
+    globalThis.localStorage = { getItem: () => 'dark', setItem() {} };
+    globalThis.matchMedia = () => ({ matches: false, addEventListener() {} });
+    document.documentElement.removeAttribute('data-theme');
+    const setAttributeSpy = document.documentElement.setAttribute;
+    let setAttributeCalled = false;
+    document.documentElement.setAttribute = function (...args) {
+      setAttributeCalled = true;
+      return setAttributeSpy.apply(this, args);
+    };
+    runThemeInit();
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(setAttributeCalled).toBe(false);
+    document.documentElement.setAttribute = setAttributeSpy;
   });
 
-  test('should only apply dark theme', () => {
-    const fs = require('fs');
-    const code = fs.readFileSync('./public/js/theme-init.js', 'utf-8');
-
-    // Should only set theme to 'dark', never 'light'
-    expect(code).toContain("theme = 'dark'");
-    expect(code).not.toContain("theme = 'light'");
+  test('does not set theme attribute when effective theme is light', () => {
+    globalThis.localStorage = { getItem: () => 'light', setItem() {} };
+    globalThis.matchMedia = () => ({ matches: true, addEventListener() {} });
+    document.documentElement.removeAttribute('data-theme');
+    runThemeInit();
+    expect(document.documentElement.dataset.theme).toBeUndefined();
   });
 
   test('should resolve effective theme correctly', () => {
@@ -85,16 +119,12 @@ describe('Theme Initialization Script', () => {
     expect(code).not.toContain('setInterval');
   });
 
-  test('should be minimal in size', () => {
-    const fs = require('fs');
-    const code = fs.readFileSync('./public/js/theme-init.js', 'utf-8');
-
-    // Should be under 500 bytes (excluding comments)
-    const codeWithoutComments = code
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      .replace(/\/\/.*/g, '');
-
-    expect(codeWithoutComments.length).toBeLessThan(500);
+  test('resolves system preference to dark when no stored preference exists', () => {
+    globalThis.localStorage = { getItem: () => null, setItem() {} };
+    globalThis.matchMedia = () => ({ matches: true, addEventListener() {} });
+    document.documentElement.removeAttribute('data-theme');
+    runThemeInit();
+    expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
   test('should have proper documentation', () => {

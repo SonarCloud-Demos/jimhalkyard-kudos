@@ -5,28 +5,77 @@ import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
  * Note: These tests verify the logic and structure of the theme module
  */
 
-describe('Theme Module Structure', () => {
-  test('theme.js should export proper structure when loaded', () => {
-    const fs = require('fs');
-    const code = fs.readFileSync('./public/js/theme.js', 'utf-8');
+const THEME_JS_PATH = require.resolve('../public/js/theme.js');
 
-    // Verify key functions are defined
-    expect(code).toContain('function initTheme');
-    expect(code).toContain('function setTheme');
-    expect(code).toContain('function getTheme');
-    expect(code).toContain('function getEffectiveTheme');
-    expect(code).toContain('function applyTheme');
+// Minimal DOM stub: only what theme.js touches during module load/init
+function createDocumentElement() {
+  const attributes = {};
+  const element = {
+    dataset: {},
+    setAttribute(name, value) {
+      attributes[name] = value;
+    },
+    getAttribute(name) {
+      return attributes[name];
+    },
+    removeAttribute(name) {
+      delete attributes[name];
+      if (name === 'data-theme') delete element.dataset.theme;
+    }
+  };
+  return element;
+}
+
+function setupDomStub() {
+  const listeners = {};
+  globalThis.document = {
+    readyState: 'complete',
+    documentElement: createDocumentElement(),
+    addEventListener() {},
+    querySelectorAll() {
+      return [];
+    }
+  };
+  globalThis.window = globalThis;
+  globalThis.addEventListener = (type, handler) => {
+    listeners[type] = listeners[type] || [];
+    listeners[type].push(handler);
+  };
+  globalThis.dispatchEvent = (event) => {
+    (listeners[event.type] || []).forEach(handler => handler(event));
+  };
+  globalThis.CustomEvent = class CustomEvent {
+    constructor(type, params = {}) {
+      this.type = type;
+      this.detail = params.detail;
+    }
+  };
+}
+
+function loadThemeModule() {
+  setupDomStub();
+  delete require.cache[THEME_JS_PATH];
+  require(THEME_JS_PATH);
+}
+
+describe('Theme Module Structure', () => {
+  test('applies dark theme when preference is dark', () => {
+    loadThemeModule();
+    globalThis.localStorage = { getItem: () => 'dark', setItem() {} };
+    globalThis.matchMedia = () => ({ matches: false, addEventListener() {} });
+    document.documentElement.removeAttribute('data-theme');
+    window.themeManager.init();
+    expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
   test('should export themeManager to window', () => {
-    const fs = require('fs');
-    const code = fs.readFileSync('./public/js/theme.js', 'utf-8');
+    loadThemeModule();
 
-    expect(code).toContain('window.themeManager');
-    expect(code).toContain('init: initTheme');
-    expect(code).toContain('set: setTheme');
-    expect(code).toContain('get: getTheme');
-    expect(code).toContain('getEffective: getEffectiveTheme');
+    expect(typeof window.themeManager).toBe('object');
+    expect(typeof window.themeManager.init).toBe('function');
+    expect(typeof window.themeManager.set).toBe('function');
+    expect(typeof window.themeManager.get).toBe('function');
+    expect(typeof window.themeManager.getEffective).toBe('function');
   });
 
   test('should define THEMES constants', () => {

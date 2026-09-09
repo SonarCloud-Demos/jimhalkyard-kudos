@@ -513,7 +513,7 @@ select.input-field {
 }
 
 .theme-option:hover {
-  background-color: var(--md-sys-overlay-light);
+  background-color: var(--md-sys-overlay-primary-hover);
 }
 
 .theme-option[aria-checked="true"] {
@@ -531,4 +531,5 @@ select.input-field {
   position: absolute;
   top: 24px;
   right: 24px;
+  background-color: var(--md-sys-color-surface-variant);
 }
