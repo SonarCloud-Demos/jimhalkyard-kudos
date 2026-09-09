@@ -1,22 +1,22 @@
 :root {
-  --md-sys-color-primary: #6750a4;
+  --md-sys-color-primary: #006781;   /* white text 6.45:1 */
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #eaddff;
-  --md-sys-color-on-primary-container: #21005d;
-  --md-sys-color-secondary: #625b71;
+  --md-sys-color-primary-container: #c8f0f9;
+  --md-sys-color-on-primary-container: #003b4a;
+  --md-sys-color-secondary: #a8004f; /* white text 7.56:1 */
   --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: #e8def8;
-  --md-sys-color-on-secondary-container: #1d192b;
-  --md-sys-color-surface: #fef7ff;
-  --md-sys-color-on-surface: #1d1b20;
-  --md-sys-color-surface-variant: #e7e0ec;
-  --md-sys-color-on-surface-variant: #49454f;
-  --md-sys-color-outline: #79747e;
-  --md-sys-color-error: #b3261e;
+  --md-sys-color-secondary-container: #ffd4e8;
+  --md-sys-color-on-secondary-container: #4a001f;
+  --md-sys-color-surface: #f8fcff;
+  --md-sys-color-on-surface: #0a1f2e;
+  --md-sys-color-surface-variant: #e6f4f9;
+  --md-sys-color-on-surface-variant: #3d5a6b;
+  --md-sys-color-outline: #5a7a8c;
+  --md-sys-color-error: #c62828;
   --md-sys-color-on-error: #ffffff;
-  --md-sys-color-error-container: #f9dedc;
-  --md-sys-color-on-error-container: #410e0b;
-  --md-sys-color-success: #2e7d32;
+  --md-sys-color-error-container: #ffd4d4;
+  --md-sys-color-on-error-container: #5c0000;
+  --md-sys-color-success: #00701f;
   --md-sys-color-on-success: #ffffff;
 }
 
@@ -133,7 +133,7 @@ body {
 }
 
 .button:hover {
-  background-color: #7965b5;
+  background-color: #00566b;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -147,7 +147,7 @@ body {
 }
 
 .button-secondary:hover {
-  background-color: #736c84;
+  background-color: #8c0042;
 }
 
 .button-text {
@@ -157,7 +157,7 @@ body {
 }
 
 .button-text:hover {
-  background-color: rgba(103, 80, 164, 0.08);
+  background-color: rgba(0, 180, 216, 0.08);
 }
 
 .button-error {
@@ -166,7 +166,7 @@ body {
 }
 
 .button-error:hover {
-  background-color: #c53929;
+  background-color: #a31f1f;
 }
 
 .button-success {
@@ -175,7 +175,7 @@ body {
 }
 
 .button-success:hover {
-  background-color: #3d8b40;
+  background-color: #005c19;
 }
 
 .fab {
@@ -245,7 +245,7 @@ textarea.input-field {
 
 select.input-field {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2349454f' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%233d5a6b' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
   padding-right: 40px;
@@ -287,8 +287,8 @@ select.input-field {
 }
 
 .alert-success {
-  background-color: #e8f5e9;
-  color: #1b5e20;
+  background-color: #ccffe6;
+  color: #004d1a;
 }
 
 .login-container {
@@ -393,7 +393,7 @@ select.input-field {
 }
 
 .table tr:hover {
-  background-color: rgba(103, 80, 164, 0.04);
+  background-color: rgba(0, 180, 216, 0.04);
 }
 
 .empty-state {
