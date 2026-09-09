@@ -9,7 +9,7 @@ shift || true
 if [[ "$#" -gt 0 ]]; then
   DIRS=("$@")
 else
-  DIRS=(dashboard server)
+  DIRS="$(pwd)"
 fi
 
 ARTIFACTORY_PREFIX='https://repox.jfrog.io/artifactory/api/npm/npm/'
