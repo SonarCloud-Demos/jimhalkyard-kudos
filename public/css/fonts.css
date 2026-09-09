@@ -2,8 +2,9 @@
  * Material Design Compatible Font System
  *
  * This file defines CSS custom properties for various Material Design compatible fonts.
- * The fonts are available but not actively used - to switch fonts, update the
- * --md-sys-typescale-* variables in use.
+ * The --md-sys-typescale-* variables below are consumed by material.css (e.g. body).
+ * The --md-font-* alternatives are provided but unused - to switch fonts, point the
+ * --md-sys-typescale-* variables at one of them.
  */
 
 :root {
