@@ -1,9 +1,9 @@
 :root {
-  --md-sys-color-primary: #00b4d8;
+  --md-sys-color-primary: #006781;   /* white text 6.45:1 */
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-primary-container: #c8f0f9;
   --md-sys-color-on-primary-container: #003b4a;
-  --md-sys-color-secondary: #ff6ba8;
+  --md-sys-color-secondary: #a8004f; /* white text 7.56:1 */
   --md-sys-color-on-secondary: #ffffff;
   --md-sys-color-secondary-container: #ffd4e8;
   --md-sys-color-on-secondary-container: #4a001f;
@@ -12,11 +12,11 @@
   --md-sys-color-surface-variant: #e6f4f9;
   --md-sys-color-on-surface-variant: #3d5a6b;
   --md-sys-color-outline: #7b9aac;
-  --md-sys-color-error: #ff5252;
+  --md-sys-color-error: #c62828;
   --md-sys-color-on-error: #ffffff;
   --md-sys-color-error-container: #ffd4d4;
   --md-sys-color-on-error-container: #5c0000;
-  --md-sys-color-success: #00e676;
+  --md-sys-color-success: #00701f;
   --md-sys-color-on-success: #ffffff;
 }
 
@@ -133,7 +133,7 @@ body {
 }
 
 .button:hover {
-  background-color: #33c4e3;
+  background-color: #00566b;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -147,7 +147,7 @@ body {
 }
 
 .button-secondary:hover {
-  background-color: #ff8cbb;
+  background-color: #8c0042;
 }
 
 .button-text {
@@ -166,7 +166,7 @@ body {
 }
 
 .button-error:hover {
-  background-color: #ff7575;
+  background-color: #a31f1f;
 }
 
 .button-success {
@@ -175,7 +175,7 @@ body {
 }
 
 .button-success:hover {
-  background-color: #33ff99;
+  background-color: #005c19;
 }
 
 .fab {
