@@ -167,3 +167,6 @@ Thumbs.db
 # Bun
 .bun/
 
+# Claude
+.claude/settings.local*
+
