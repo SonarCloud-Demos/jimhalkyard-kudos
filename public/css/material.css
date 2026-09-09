@@ -1,3 +1,5 @@
+@import url('fonts.css');
+
 :root {
   --md-sys-color-primary: #006781;   /* white text 6.45:1 */
   --md-sys-color-on-primary: #ffffff;
@@ -27,7 +29,7 @@
 }
 
 body {
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--md-sys-typescale-body-font);
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
   line-height: 1.6;
