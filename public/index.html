@@ -4,14 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kudos Portal - Login</title>
+  <script>
+    (function() {
+      const THEME_KEY = 'kudos-theme-preference';
+      const preference = localStorage.getItem(THEME_KEY) || 'system';
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const effectiveTheme = preference === 'system' ? (systemDark ? 'dark' : 'light') : preference;
+
+      if (effectiveTheme === 'dark') {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/material.css">
+  <link rel="stylesheet" href="/css/theme-dark.css">
 </head>
 <body>
   <div class="login-container">
+    <div class="theme-toggle" role="radiogroup" aria-label="Theme selection">
+      <button class="theme-option" data-theme="light" role="radio" aria-checked="false" aria-label="Light theme" title="Light theme">☀️</button>
+      <button class="theme-option" data-theme="dark" role="radio" aria-checked="false" aria-label="Dark theme" title="Dark theme">🌙</button>
+      <button class="theme-option" data-theme="system" role="radio" aria-checked="true" aria-label="System theme" title="Follow system preference">💻</button>
+    </div>
     <div class="login-header">
       <h1>Kudos Portal</h1>
       <p>Internal Employee Feedback & Recognition</p>
@@ -71,6 +89,12 @@
     </div>
   </div>
 
+  <script src="/js/theme.js"></script>
+  <script>
+    if (window.themeManager) {
+      window.themeManager.init();
+    }
+  </script>
   <script>
     function showTab(tab) {
       const loginTab = document.querySelectorAll('.login-tab')[0];
