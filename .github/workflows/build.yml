@@ -40,7 +40,7 @@ jobs:
         run: bash scripts/normalize-bun-lock-registry.sh . .
         
       - name: Install Dependencies
-        run: bun install --ignore-scripts
+        run: bun install --ignore-scripts --frozen-lockfile
 
       - name: Run Tests and Generate Coverage
         run: bun test --coverage
