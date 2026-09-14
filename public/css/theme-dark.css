@@ -1,0 +1,71 @@
+/* Material Design 3 Dark Theme */
+
+[data-theme="dark"] {
+  /* Primary colors - lighter teal for dark backgrounds */
+  --md-sys-color-primary: #5dd4f4;
+  --md-sys-color-on-primary: #003640;
+  --md-sys-color-primary-container: #004d5c;
+  --md-sys-color-on-primary-container: #b8eaff;
+
+  /* Secondary colors - lighter magenta for dark backgrounds */
+  --md-sys-color-secondary: #ffb0d6;
+  --md-sys-color-on-secondary: #5b0032;
+  --md-sys-color-secondary-container: #7f0046;
+  --md-sys-color-on-secondary-container: #ffd9eb;
+
+  /* Surface colors - dark blue-gray palette */
+  --md-sys-color-surface: #0e1b22;
+  --md-sys-color-on-surface: #dfe3e8;
+  --md-sys-color-surface-variant: #3f4e56;
+  --md-sys-color-on-surface-variant: #bfc8cf;
+  --md-sys-color-outline: #89939a;
+
+  /* Error colors */
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  /* Success colors */
+  --md-sys-color-success: #6ddb80;
+  --md-sys-color-on-success: #00390a;
+
+  /* Adjusted shadows for dark theme - darker and more prominent */
+  --md-sys-shadow-1: rgba(0, 0, 0, 0.3);
+  --md-sys-shadow-2: rgba(0, 0, 0, 0.4);
+  --md-sys-shadow-3: rgba(0, 0, 0, 0.5);
+  --md-sys-shadow-4: rgba(0, 0, 0, 0.6);
+  --md-sys-shadow-5: rgba(0, 0, 0, 0.8);
+  --md-sys-overlay-light: rgba(255, 255, 255, 0.08);
+  --md-sys-overlay-primary: rgba(93, 212, 244, 0.08);
+  --md-sys-overlay-primary-hover: rgba(93, 212, 244, 0.12);
+  --md-sys-state-hover-primary: #4ab5d0;
+}
+
+/* Component-specific dark theme overrides */
+
+[data-theme="dark"] .button-secondary:hover {
+  background-color: #d88fb5;
+}
+
+[data-theme="dark"] .button-error:hover {
+  background-color: #ff9088;
+}
+
+[data-theme="dark"] .button-success:hover {
+  background-color: #52ba66;
+}
+
+[data-theme="dark"] .alert-success {
+  background-color: #003914;
+  color: #b9f1c6;
+}
+
+[data-theme="dark"] select.input-field {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23bfc8cf' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+}
+
+/* Ensure body background uses surface color in dark mode */
+[data-theme="dark"] body {
+  background-color: var(--md-sys-color-surface);
+}
