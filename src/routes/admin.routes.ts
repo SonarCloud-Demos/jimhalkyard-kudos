@@ -15,9 +15,9 @@ admin.get('/users', (c) => {
 });
 
 admin.patch('/users/:id/status', async (c) => {
-  const id = parseInt(c.req.param('id'));
+  const id = Number.parseInt(c.req.param('id'), 10);
 
-  if (isNaN(id)) {
+  if (Number.isNaN(id)) {
     throw new ValidationError('Invalid user ID');
   }
 
