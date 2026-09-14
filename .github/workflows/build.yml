@@ -53,3 +53,4 @@ jobs:
         with:
           args: >
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+            -Dsonar.verbose=true
