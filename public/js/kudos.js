@@ -93,7 +93,7 @@ function closeModal() {
 document.getElementById('kudos-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const recipientId = parseInt(document.getElementById('recipient').value);
+  const recipientId = Number.parseInt(document.getElementById('recipient').value, 10);
   const message = document.getElementById('message').value;
 
   if (!recipientId) {
