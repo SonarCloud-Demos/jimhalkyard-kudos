@@ -61,7 +61,7 @@ app.notFound((c) => {
   );
 });
 
-const port = parseInt(process.env.PORT || '3000');
+const port = Number.parseInt(process.env.PORT || '3000', 10);
 
 console.log(`\n🚀 Server starting on http://localhost:${port}`);
 console.log(`   - Login page: http://localhost:${port}/`);

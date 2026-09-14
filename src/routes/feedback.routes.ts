@@ -46,9 +46,9 @@ feedback.get('/', (c) => {
 
 feedback.get('/:id', (c) => {
   const user = c.get('user');
-  const id = parseInt(c.req.param('id'));
+  const id = Number.parseInt(c.req.param('id'), 10);
 
-  if (isNaN(id)) {
+  if (Number.isNaN(id)) {
     throw new ValidationError('Invalid feedback ID');
   }
 
