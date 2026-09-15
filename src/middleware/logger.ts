@@ -14,5 +14,5 @@ export async function logger(c: Context, next: Next) {
   const resetColor = '\x1b[0m';
 
 
-  console.log({ method: `${logColor}${method}`, path, status: `${status}{resetColor}`, elapsed: `${elapsed}ms` });
+  console.log({ method: `${logColor}${method}`, path, status: `${status}${resetColor}`, elapsed: `${elapsed}ms` });
 }
