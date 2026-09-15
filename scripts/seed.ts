@@ -1,7 +1,7 @@
 import { initDatabase } from '../src/db/database';
 
 async function seed() {
-  console.log('Starting database seed...');
+  console.info('Starting database seed...');
 
   const db = initDatabase();
 
@@ -86,7 +86,7 @@ async function seed() {
     'Human Resources'
   );
 
-  console.log('✓ Sample users created');
+  console.info('✓ Sample users created');
 
   // Insert sample kudos posts
   const insertKudos = db.prepare(
@@ -111,7 +111,7 @@ async function seed() {
     'Outstanding work on the project presentation. Well done!'
   );
 
-  console.log('✓ Sample kudos posts created');
+  console.info('✓ Sample kudos posts created');
 
   // Insert sample feedback posts
   const insertFeedback = db.prepare(
@@ -163,14 +163,14 @@ async function seed() {
     'HR_ONLY'
   );
 
-  console.log('✓ Sample feedback posts created');
+  console.info('✓ Sample feedback posts created');
 
-  console.log('\n✅ Database seeded successfully!\n');
-  console.log('Sample credentials:');
-  console.log('  Employee: alice@company.com / employee123');
-  console.log('  Manager:  diana@company.com / manager123');
-  console.log('  HR Admin: frank@company.com / hradmin123');
-  console.log('');
+  console.info('\n✅ Database seeded successfully!\n');
+  console.info('Sample credentials:');
+  console.info('  Employee: alice@company.com / employee123');
+  console.info('  Manager:  diana@company.com / manager123');
+  console.info('  HR Admin: frank@company.com / hradmin123');
+  console.info('');
 
   db.close();
 }

@@ -15,7 +15,7 @@ export function initDatabase(path: string = process.env.DATABASE_PATH || './kudo
   const schema = readFileSync(join(import.meta.dir, 'schema.sql'), 'utf-8');
   db.exec(schema);
 
-  console.log(`Database initialized at ${path}`);
+  console.info(`Database initialized at ${path}`);
   return db;
 }
 
@@ -30,6 +30,6 @@ export function closeDatabase(): void {
   if (db) {
     db.close();
     db = null;
-    console.log('Database connection closed');
+    console.info('Database connection closed');
   }
 }
