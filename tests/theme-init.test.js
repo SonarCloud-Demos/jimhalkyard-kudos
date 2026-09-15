@@ -27,6 +27,7 @@ function createDocumentElement() {
 }
 
 globalThis.document = { documentElement: createDocumentElement() };
+globalThis.window = globalThis; // Ensure window references globalThis
 
 function runThemeInit() {
   delete require.cache[THEME_INIT_PATH];
