@@ -63,12 +63,12 @@ app.notFound((c) => {
 
 const port = Number.parseInt(process.env.PORT || '3000', 10);
 
-console.log(`\n🚀 Server starting on http://localhost:${port}`);
-console.log(`   - Login page: http://localhost:${port}/`);
-console.log(`   - Dashboard:  http://localhost:${port}/dashboard`);
-console.log(`   - Kudos:      http://localhost:${port}/kudos`);
-console.log(`   - Feedback:   http://localhost:${port}/feedback`);
-console.log(`   - Admin:      http://localhost:${port}/admin\n`);
+console.info(`\n🚀 Server starting on http://localhost:${port}`);
+console.info(`   - Login page: http://localhost:${port}/`);
+console.info(`   - Dashboard:  http://localhost:${port}/dashboard`);
+console.info(`   - Kudos:      http://localhost:${port}/kudos`);
+console.info(`   - Feedback:   http://localhost:${port}/feedback`);
+console.info(`   - Admin:      http://localhost:${port}/admin\n`);
 
 export default {
   port,
