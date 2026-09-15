@@ -7,6 +7,7 @@ import {
   getFeedbackByDepartment,
 } from '../src/services/feedback.service';
 import { createTestDatabase, seedTestUsers, closeTestDatabase } from './helpers/database.helper';
+import { getDatabase } from '../src/db/database';
 import { NotFoundError, ForbiddenError } from '../src/utils/errors';
 
 describe('Feedback Service', () => {
@@ -39,7 +40,7 @@ describe('Feedback Service', () => {
       expect(feedback.visibility).toBe('PUBLIC');
     });
 
-    test('creates anonymous feedback with null author_id', () => {
+    test('creates anonymous feedback while storing the real author_id', () => {
       const feedback = createFeedback(
         testUsers.manager.id,
         'Marketing',
@@ -48,7 +49,7 @@ describe('Feedback Service', () => {
         'PUBLIC'
       );
 
-      expect(feedback.author_id).toBeNull();
+      expect(feedback.author_id).toBe(testUsers.manager.id);
       expect(feedback.is_anonymous).toBe(1);
       expect(feedback.message).toBe('Anonymous feedback message');
     });
@@ -161,7 +162,7 @@ describe('Feedback Service', () => {
       expect(anonFound?.author_name).toBeNull();
     });
 
-    test('anonymous feedback has no author even for HR admins', () => {
+    test('HR admins can see the real author of anonymous feedback', () => {
       const anonFeedback = createFeedback(
         testUsers.manager.id,
         'Engineering',
@@ -173,19 +174,31 @@ describe('Feedback Service', () => {
       const hrFeedbacks = getFeedbackVisibleToUser(testUsers.hrAdmin);
       const anonFound = hrFeedbacks.find(f => f.id === anonFeedback.id);
 
-      // Anonymous feedback stores null author_id, so even HR can't see it
-      expect(anonFound?.author_id).toBeNull();
+      // HR admins can always see the real author, even for anonymous feedback
+      expect(anonFound?.author_id).toBe(testUsers.manager.id);
       expect(anonFound?.is_anonymous).toBe(1);
     });
 
     test('returns feedbacks ordered by created_at DESC', () => {
+      const db = getDatabase();
+      db.prepare(
+        `INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).run(testUsers.employee.id, 'Engineering', 'Oldest ordering feedback', 0, 'PUBLIC', '2020-01-01 00:00:00');
+
+      const newest = createFeedback(
+        testUsers.employee.id,
+        'Engineering',
+        'Newest ordering feedback',
+        false,
+        'PUBLIC'
+      );
+
       const feedbacks = getFeedbackVisibleToUser(testUsers.hrAdmin);
 
-      for (let i = 0; i < feedbacks.length - 1; i++) {
-        const current = new Date(feedbacks[i].created_at);
-        const next = new Date(feedbacks[i + 1].created_at);
-        expect(current >= next).toBe(true);
-      }
+      expect(feedbacks[0].id).toBe(newest.id);
+      expect(feedbacks[0].message).toBe('Newest ordering feedback');
+      expect(feedbacks[feedbacks.length - 1].message).toBe('Oldest ordering feedback');
     });
   });
 
@@ -308,7 +321,7 @@ describe('Feedback Service', () => {
       expect(feedback.author_name).toBeNull();
     });
 
-    test('anonymous feedback has no author even when viewed by HR admins', () => {
+    test('HR admins can see the real author when viewing anonymous feedback', () => {
       const anonFeedback = createFeedback(
         testUsers.manager.id,
         'Engineering',
@@ -319,9 +332,9 @@ describe('Feedback Service', () => {
 
       const feedback = getFeedbackById(anonFeedback.id, testUsers.hrAdmin);
 
-      // Anonymous feedback stores null author_id in database
-      expect(feedback.author_id).toBeNull();
-      expect(feedback.author_name).toBeNull();
+      // HR admins can always see the real author, even for anonymous feedback
+      expect(feedback.author_id).toBe(testUsers.manager.id);
+      expect(feedback.author_name).toBe(testUsers.manager.name);
       expect(feedback.is_anonymous).toBe(1);
     });
   });
@@ -356,7 +369,7 @@ describe('Feedback Service', () => {
       });
     });
 
-    test('anonymous feedback has null author in admin view', () => {
+    test('anonymous feedback retains real author in admin view', () => {
       const anonFeedback = createFeedback(
         testUsers.employee.id,
         'Engineering',
@@ -368,20 +381,32 @@ describe('Feedback Service', () => {
       const feedbacks = getAllFeedbackForAdmin();
       const found = feedbacks.find(f => f.id === anonFeedback.id);
 
-      // Anonymous feedback stores null in database, no way to retrieve original author
-      expect(found?.author_id).toBeNull();
-      expect(found?.author_name).toBeNull();
+      // getAllFeedbackForAdmin does not hide authors; HR admins can always see the real author
+      expect(found?.author_id).toBe(testUsers.employee.id);
+      expect(found?.author_name).toBe(testUsers.employee.name);
       expect(found?.is_anonymous).toBe(1);
     });
 
     test('returns feedbacks ordered by created_at DESC', () => {
+      const db = getDatabase();
+      db.prepare(
+        `INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).run(testUsers.employee.id, 'Engineering', 'Oldest admin ordering feedback', 0, 'PUBLIC', '2020-01-01 00:00:00');
+
+      const newest = createFeedback(
+        testUsers.employee.id,
+        'Engineering',
+        'Newest admin ordering feedback',
+        false,
+        'PUBLIC'
+      );
+
       const feedbacks = getAllFeedbackForAdmin();
 
-      for (let i = 0; i < feedbacks.length - 1; i++) {
-        const current = new Date(feedbacks[i].created_at);
-        const next = new Date(feedbacks[i + 1].created_at);
-        expect(current >= next).toBe(true);
-      }
+      expect(feedbacks[0].id).toBe(newest.id);
+      expect(feedbacks[0].message).toBe('Newest admin ordering feedback');
+      expect(feedbacks[feedbacks.length - 1].message).toBe('Oldest admin ordering feedback');
     });
   });
 
@@ -443,7 +468,7 @@ describe('Feedback Service', () => {
       expect(found?.author_name).toBeNull();
     });
 
-    test('anonymous feedback has no author even for HR in department view', () => {
+    test('HR admins can see the real author in department view', () => {
       const anonFeedback = createFeedback(
         testUsers.manager.id,
         'Engineering',
@@ -455,20 +480,32 @@ describe('Feedback Service', () => {
       const feedbacks = getFeedbackByDepartment('Engineering', testUsers.hrAdmin);
       const found = feedbacks.find(f => f.id === anonFeedback.id);
 
-      // Anonymous feedback stores null author_id, irrecoverable
-      expect(found?.author_id).toBeNull();
-      expect(found?.author_name).toBeNull();
+      // HR admins can always see the real author, even for anonymous feedback
+      expect(found?.author_id).toBe(testUsers.manager.id);
+      expect(found?.author_name).toBe(testUsers.manager.name);
       expect(found?.is_anonymous).toBe(1);
     });
 
     test('returns feedbacks ordered by created_at DESC', () => {
+      const db = getDatabase();
+      db.prepare(
+        `INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).run(testUsers.employee.id, 'Engineering', 'Oldest dept ordering feedback', 0, 'PUBLIC', '2020-01-01 00:00:00');
+
+      const newest = createFeedback(
+        testUsers.employee.id,
+        'Engineering',
+        'Newest dept ordering feedback',
+        false,
+        'PUBLIC'
+      );
+
       const feedbacks = getFeedbackByDepartment('Engineering', testUsers.hrAdmin);
 
-      for (let i = 0; i < feedbacks.length - 1; i++) {
-        const current = new Date(feedbacks[i].created_at);
-        const next = new Date(feedbacks[i + 1].created_at);
-        expect(current >= next).toBe(true);
-      }
+      expect(feedbacks[0].id).toBe(newest.id);
+      expect(feedbacks[0].message).toBe('Newest dept ordering feedback');
+      expect(feedbacks[feedbacks.length - 1].message).toBe('Oldest dept ordering feedback');
     });
 
     test('returns empty array for department with no feedback', () => {

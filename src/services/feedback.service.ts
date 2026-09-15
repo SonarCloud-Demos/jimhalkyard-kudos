@@ -12,14 +12,12 @@ export function createFeedback(
 ): FeedbackPost {
   const db = getDatabase();
 
-  const actualAuthorId = isAnonymous ? null : authorId;
-
   const stmt = db.prepare(
     'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility) VALUES (?, ?, ?, ?, ?)'
   );
 
   const result = stmt.run(
-    actualAuthorId,
+    authorId,
     targetDepartment,
     message,
     isAnonymous ? 1 : 0,

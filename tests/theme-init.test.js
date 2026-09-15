@@ -14,10 +14,6 @@ function createDocumentElement() {
     dataset: {},
     setAttribute(name, value) {
       attributes[name] = value;
-      // Sync dataset for data-* attributes
-      if (name === 'data-theme') {
-        element.dataset.theme = value;
-      }
     },
     getAttribute(name) {
       return attributes[name];

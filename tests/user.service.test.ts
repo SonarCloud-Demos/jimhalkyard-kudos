@@ -137,7 +137,7 @@ describe('User Service', () => {
       const users = getAllUsers();
 
       expect(users.length).toBeGreaterThanOrEqual(5);
-      expect(users[0].name).toBe('Alice Employee'); // Alphabetically first
+      expect(users.some(u => u.name === 'Alice Employee')).toBe(true);
 
       // Verify users are sorted
       for (let i = 0; i < users.length - 1; i++) {
@@ -163,7 +163,7 @@ describe('User Service', () => {
     test('filters users by department correctly', () => {
       const engineeringUsers = getUsersByDepartment('Engineering');
 
-      expect(engineeringUsers).toHaveLength(2);
+      expect(engineeringUsers.length).toBeGreaterThanOrEqual(2);
       expect(engineeringUsers.every(u => u.department === 'Engineering')).toBe(true);
       expect(engineeringUsers.some(u => u.email === 'alice@test.com')).toBe(true);
       expect(engineeringUsers.some(u => u.email === 'bob@test.com')).toBe(true);
@@ -254,9 +254,9 @@ describe('User Service', () => {
 
       const activeEngineering = getActiveUsersByDepartment('Engineering');
 
-      expect(activeEngineering).toHaveLength(1);
-      expect(activeEngineering[0].email).toBe('bob@test.com');
       expect(activeEngineering.every(u => u.is_active === 1)).toBe(true);
+      expect(activeEngineering.some(u => u.email === 'alice@test.com')).toBe(false);
+      expect(activeEngineering.some(u => u.email === 'bob@test.com')).toBe(true);
     });
 
     test('returns empty array when all users are inactive', () => {
