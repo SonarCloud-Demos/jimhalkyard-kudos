@@ -85,10 +85,7 @@ export function toSafeUser(user: User): SafeUser {
 
 export function getActiveUsersByDepartment(department: string): SafeUser[] {
   const db = getDatabase();
-  const users = db
-    .prepare(
-      'SELECT id, name, email, role, department, is_active, created_at FROM users WHERE department = ? AND is_active = 1 ORDER BY name'
-    )
+  return db
+    .prepare('SELECT id, name, email, role, department, is_active, created_at FROM users WHERE department = ? AND is_active = 1 ORDER BY name')
     .all(department) as SafeUser[];
-  return users;
 }
