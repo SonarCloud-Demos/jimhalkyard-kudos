@@ -10,5 +10,8 @@ export async function logger(c: Context, next: Next) {
   const elapsed = Date.now() - start;
   const status = c.res.status;
 
-  console.log({ method, path, status, elapsed: `${elapsed}ms` });
+  const logColor = status >= 500 ? '\x1b[31m' : status >= 400 ? '\x1b[33m' : '\x1b[32m';
+  const resetColor = '\x1b[0m';
+
+  console.log({`${logColor}${method}` path `${status}${resetColor}` elapsed: `${elapsed}ms` });
 }
