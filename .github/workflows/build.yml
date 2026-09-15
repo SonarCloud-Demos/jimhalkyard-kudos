@@ -16,7 +16,7 @@ on:
       - hunter-agent
 
   schedule:
-    - cron: '0 2 * * 1-5'   # nightly Mon–Fri at 2am
+    - cron: '31 11 * * 1-5' 
     
 jobs:
   sonarqube:  
