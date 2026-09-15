@@ -45,6 +45,10 @@ jobs:
       - name: Run Tests and Generate Coverage
         run: bun test --coverage
 
+      - name: Extract version from package.json
+        id: package-version
+        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@59db25f34e16620e48ab4bb9e4a5dce155cb5432 # v8.0.0
         env:
@@ -52,3 +56,4 @@ jobs:
         with:
           args: >
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+            -Dsonar.projectVersion=${{ steps.package-version.outputs.VERSION }}
