@@ -2,4 +2,4 @@
 if ! command -v sonar &> /dev/null; then
   exit 0
 fi
-sonar hook claude-post-tool-use
+sonar hook agent-session-start --agent claude
