@@ -198,27 +198,38 @@ describe('Theme Module - Full Integration with Auto-Initialization', () => {
     expect(lightOption.getAttribute('aria-checked')).toBe('true');
   });
 
-  test('keyboard navigation functionality exists', () => {
-    require(THEME_JS_PATH);
-
-    // Just verify the module loaded and API is available
-    expect(window.themeManager).toBeDefined();
-
-    // Keyboard navigation is set up during initThemeToggle
-    // which runs automatically when the module loads
-  });
-
-  test('theme toggle sets initial tabIndex correctly', () => {
+  test('theme toggle sets roving tabIndex on the checked option', () => {
+    // initThemeToggle runs automatically on require (readyState is
+    // 'complete'), before init() has read the stored preference, so the
+    // toggle's initial checked/focusable option is still the 'system'
+    // default rather than the value just written to localStorage.
     globalThis.localStorage.setItem('kudos-theme-preference', 'dark');
     require(THEME_JS_PATH);
 
     const darkOption = env.themeOptions.find(opt => opt.dataset.theme === 'dark');
     const lightOption = env.themeOptions.find(opt => opt.dataset.theme === 'light');
+    const systemOption = env.themeOptions.find(opt => opt.dataset.theme === 'system');
 
-    // The selected option should have tabIndex 0, others -1
-    // This is set during initialization
-    expect([0, -1]).toContain(darkOption.tabIndex);
-    expect([-1]).toContain(lightOption.tabIndex);
+    // Exactly one option should be focusable (tabIndex 0), and it must be
+    // the one that is checked; every other option must be tabIndex -1.
+    let checked = env.themeOptions.filter(opt => opt.getAttribute('aria-checked') === 'true');
+    expect(checked).toHaveLength(1);
+    expect(checked[0]).toBe(systemOption);
+
+    expect(systemOption.tabIndex).toBe(0);
+    expect(lightOption.tabIndex).toBe(-1);
+    expect(darkOption.tabIndex).toBe(-1);
+
+    // After init() picks up the stored 'dark' preference and the user
+    // clicks the dark option, aria-checked moves to it. (The click handler
+    // only updates aria-checked, not tabIndex, which stays roving from the
+    // initial setup.)
+    window.themeManager.init();
+    darkOption.click();
+
+    checked = env.themeOptions.filter(opt => opt.getAttribute('aria-checked') === 'true');
+    expect(checked).toHaveLength(1);
+    expect(checked[0]).toBe(darkOption);
   });
 
   test('handles all arrow key directions', () => {

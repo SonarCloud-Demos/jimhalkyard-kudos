@@ -459,30 +459,35 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     return element;
   }
 
+  // These tests populate document._mockElements *before* re-requiring
+  // theme.js, so the module's own initThemeToggle() (run automatically on
+  // load) wires up the real click/keydown handlers against these mocks,
+  // instead of re-implementing that logic locally in the test.
+  function loadThemeToggleWithOptions(options) {
+    document._mockElements = options;
+    delete require.cache[THEME_JS_PATH];
+    require(THEME_JS_PATH);
+  }
+
   test('initThemeToggle sets initial aria-checked states', () => {
     const lightOption = createMockThemeOption('light');
     const darkOption = createMockThemeOption('dark');
     const systemOption = createMockThemeOption('system');
 
-    document._mockElements = [lightOption, darkOption, systemOption];
-
-    window.themeManager.init();
-    window.themeManager.set('dark');
-
-    // Manually call initThemeToggle (simulating DOM ready)
-    const initThemeToggle = () => {
-      const options = document.querySelectorAll('.theme-option');
-      const currentTheme = window.themeManager.get();
-
-      options.forEach(option => {
-        const theme = option.dataset.theme;
-        option.setAttribute('aria-checked', theme === currentTheme ? 'true' : 'false');
-      });
-    };
-
-    initThemeToggle();
+    // initThemeToggle runs automatically on module load, before init() has
+    // ever been called, so getTheme() still reports the 'system' default.
+    loadThemeToggleWithOptions([lightOption, darkOption, systemOption]);
 
     expect(lightOption.getAttribute('aria-checked')).toBe('false');
+    expect(darkOption.getAttribute('aria-checked')).toBe('false');
+    expect(systemOption.getAttribute('aria-checked')).toBe('true');
+
+    // Once init() reads the stored preference and the toggle reacts to the
+    // resulting themechange-equivalent path (an explicit click), the real
+    // aria-checked state updates accordingly.
+    window.themeManager.init();
+    darkOption.click();
+
     expect(darkOption.getAttribute('aria-checked')).toBe('true');
     expect(systemOption.getAttribute('aria-checked')).toBe('false');
   });
@@ -491,22 +496,13 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const lightOption = createMockThemeOption('light');
     const darkOption = createMockThemeOption('dark');
 
-    document._mockElements = [lightOption, darkOption];
-
-    window.themeManager.init();
-
-    // Simulate initThemeToggle setup
-    const options = document.querySelectorAll('.theme-option');
-    options.forEach(option => {
-      option.addEventListener('click', () => {
-        const theme = option.dataset.theme;
-        window.themeManager.set(theme);
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption]);
 
     darkOption.click();
 
     expect(window.themeManager.get()).toBe('dark');
+    expect(darkOption.getAttribute('aria-checked')).toBe('true');
+    expect(lightOption.getAttribute('aria-checked')).toBe('false');
   });
 
   test('initThemeToggle handles ArrowRight navigation', () => {
@@ -514,21 +510,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const darkOption = createMockThemeOption('dark');
     const systemOption = createMockThemeOption('system');
 
-    const options = [lightOption, darkOption, systemOption];
-    document._mockElements = options;
-
-    // Simulate keyboard navigation handler
-    options.forEach((option, index) => {
-      option.addEventListener('keydown', (event) => {
-        const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-          : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
-        if (!step) return;
-        event.preventDefault();
-        const next = options[(index + step + options.length) % options.length];
-        next.focus();
-        next.click();
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption, systemOption]);
 
     const event = lightOption._triggerKeydown('ArrowRight');
 
@@ -541,19 +523,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const darkOption = createMockThemeOption('dark');
     const systemOption = createMockThemeOption('system');
 
-    const options = [lightOption, darkOption, systemOption];
-    document._mockElements = options;
-
-    options.forEach((option, index) => {
-      option.addEventListener('keydown', (event) => {
-        const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-          : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
-        if (!step) return;
-        event.preventDefault();
-        const next = options[(index + step + options.length) % options.length];
-        next.focus();
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption, systemOption]);
 
     const event = darkOption._triggerKeydown('ArrowLeft');
 
@@ -565,18 +535,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const lightOption = createMockThemeOption('light');
     const darkOption = createMockThemeOption('dark');
 
-    const options = [lightOption, darkOption];
-    document._mockElements = options;
-
-    options.forEach((option, index) => {
-      option.addEventListener('keydown', (event) => {
-        const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-          : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
-        if (!step) return;
-        const next = options[(index + step + options.length) % options.length];
-        next.focus();
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption]);
 
     lightOption._triggerKeydown('ArrowDown');
 
@@ -587,18 +546,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const lightOption = createMockThemeOption('light');
     const darkOption = createMockThemeOption('dark');
 
-    const options = [lightOption, darkOption];
-    document._mockElements = options;
-
-    options.forEach((option, index) => {
-      option.addEventListener('keydown', (event) => {
-        const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-          : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
-        if (!step) return;
-        const next = options[(index + step + options.length) % options.length];
-        next.focus();
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption]);
 
     darkOption._triggerKeydown('ArrowUp');
 
@@ -608,14 +556,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
   test('initThemeToggle ignores non-arrow keys', () => {
     const lightOption = createMockThemeOption('light');
 
-    document._mockElements = [lightOption];
-
-    lightOption.addEventListener('keydown', (event) => {
-      const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-        : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
-      if (!step) return;
-      event.preventDefault();
-    });
+    loadThemeToggleWithOptions([lightOption]);
 
     const event = lightOption._triggerKeydown('Enter');
 
@@ -627,18 +568,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const darkOption = createMockThemeOption('dark');
     const systemOption = createMockThemeOption('system');
 
-    const options = [lightOption, darkOption, systemOption];
-    document._mockElements = options;
-
-    options.forEach((option, index) => {
-      option.addEventListener('keydown', (event) => {
-        const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-          : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
-        if (!step) return;
-        const next = options[(index + step + options.length) % options.length];
-        next.focus();
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption, systemOption]);
 
     // Go right from last option -> wraps to first
     systemOption._triggerKeydown('ArrowRight');
@@ -649,16 +579,7 @@ describe('Theme Module - initThemeToggle with DOM elements', () => {
     const lightOption = createMockThemeOption('light');
     const darkOption = createMockThemeOption('dark');
 
-    document._mockElements = [lightOption, darkOption];
-
-    // Simulate themechange listener
-    window.addEventListener('themechange', (e) => {
-      const options = document.querySelectorAll('.theme-option');
-      options.forEach(option => {
-        const theme = option.dataset.theme;
-        option.setAttribute('aria-checked', theme === e.detail.preference ? 'true' : 'false');
-      });
-    });
+    loadThemeToggleWithOptions([lightOption, darkOption]);
 
     window.themeManager.init();
     window.themeManager.set('dark');
