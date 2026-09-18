@@ -8,8 +8,7 @@ export function createFeedback(
   targetDepartment: string,
   message: string,
   isAnonymous: boolean,
-  visibility: FeedbackVisibility
-): FeedbackPost {
+  visibility: FeedbackVisibility): FeedbackPost {
   const db = getDatabase();
 
   const stmt = db.prepare(
