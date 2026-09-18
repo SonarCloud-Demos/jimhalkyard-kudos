@@ -1,6 +1,6 @@
 {
   "name": "kudos-portal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Internal Employee Feedback & Kudos Portal",
   "type": "module",
   "scripts": {
