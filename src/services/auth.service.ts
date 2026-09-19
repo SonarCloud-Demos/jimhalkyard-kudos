@@ -3,8 +3,7 @@ import type { JWTPayload, User, FeedbackPost, UserRole } from '../models/types';
 import { UnauthorizedError } from '../utils/errors';
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'default-secret-key-change-this'
-);
+  process.env.JWT_SECRET || 'default-secret-key-change-this');
 
 export async function hashPassword(password: string): Promise<string> {
   return await Bun.password.hash(password, {
