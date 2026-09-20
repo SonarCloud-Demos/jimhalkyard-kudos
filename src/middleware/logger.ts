@@ -10,7 +10,14 @@ export async function logger(c: Context, next: Next) {
   const elapsed = Date.now() - start;
   const status = c.res.status;
 
-  const logColor = status >= 500 ? '\x1b[31m' : status >= 400 ? '\x1b[33m' : '\x1b[32m';
+  let logColor: string;
+  if (status >= 500) {
+    logColor = '\x1b[31m';
+  } else if (status >= 400) {
+    logColor = '\x1b[33m';
+  } else {
+    logColor = '\x1b[32m';
+  }
   const resetColor = '\x1b[0m';
 
 
