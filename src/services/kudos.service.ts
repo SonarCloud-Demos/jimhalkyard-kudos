@@ -6,8 +6,7 @@ import { getUserById } from './user.service';
 export function createKudos(
   authorId: number,
   recipientId: number,
-  message: string
-): KudosPost {
+  message: string): KudosPost {
   const db = getDatabase();
 
   const recipient = getUserById(recipientId);
@@ -16,8 +15,7 @@ export function createKudos(
   }
 
   const stmt = db.prepare(
-    'INSERT INTO kudos_posts (author_id, recipient_id, message) VALUES (?, ?, ?)'
-  );
+    'INSERT INTO kudos_posts (author_id, recipient_id, message) VALUES (?, ?, ?)');
 
   const result = stmt.run(authorId, recipientId, message);
 
@@ -31,7 +29,7 @@ export function createKudos(
 export function getAllPublicKudos(): KudosPostWithNames[] {
   const db = getDatabase();
 
-  const kudos = db
+  return db
     .prepare(
       `SELECT
         k.*,
@@ -41,17 +39,14 @@ export function getAllPublicKudos(): KudosPostWithNames[] {
       JOIN users a ON k.author_id = a.id
       JOIN users r ON k.recipient_id = r.id
       WHERE k.is_public = 1
-      ORDER BY k.created_at DESC`
-    )
+      ORDER BY k.created_at DESC`)
     .all() as KudosPostWithNames[];
-
-  return kudos;
 }
 
 export function getKudosById(id: number): KudosPostWithNames | null {
   const db = getDatabase();
 
-  const kudos = db
+  const kudos: KudosPostWithNames | undefined = db
     .prepare(
       `SELECT
         k.*,
@@ -60,9 +55,8 @@ export function getKudosById(id: number): KudosPostWithNames | null {
       FROM kudos_posts k
       JOIN users a ON k.author_id = a.id
       JOIN users r ON k.recipient_id = r.id
-      WHERE k.id = ?`
-    )
-    .get(id) as KudosPostWithNames | undefined;
+      WHERE k.id = ?`)
+    .get(id);
 
   return kudos || null;
 }
@@ -70,7 +64,7 @@ export function getKudosById(id: number): KudosPostWithNames | null {
 export function getKudosReceivedByUser(userId: number): KudosPostWithNames[] {
   const db = getDatabase();
 
-  const kudos = db
+  return db
     .prepare(
       `SELECT
         k.*,
@@ -80,11 +74,8 @@ export function getKudosReceivedByUser(userId: number): KudosPostWithNames[] {
       JOIN users a ON k.author_id = a.id
       JOIN users r ON k.recipient_id = r.id
       WHERE k.recipient_id = ? AND k.is_public = 1
-      ORDER BY k.created_at DESC`
-    )
+      ORDER BY k.created_at DESC`)
     .all(userId) as KudosPostWithNames[];
-
-  return kudos;
 }
 
 export function getKudosGivenByUser(userId: number): KudosPostWithNames[] {
