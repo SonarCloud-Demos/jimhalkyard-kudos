@@ -57,7 +57,7 @@ Vortex analysis is the final confirmation layer at the end of every turn in whic
 
 **Trigger:** the moment before you send your final reply for the turn.
 
-When the trigger fires, you **MUST** run Vortex analysis on the full set of files you modified this turn — **one command, not a per-file loop**.
+When the trigger fires, you **MUST** run Vortex analysis on the full set of files you modified this turn.
 
 **Preferred:** pass every path you modified this turn in a single invocation (repeat `--file` for each path). Use paths **relative to the project root** (e.g. `src/foo.ts`). For end-of-turn analysis, **always** pass `--depth DEEP` — even when you changed only one file — so cross-file findings are included.
 
