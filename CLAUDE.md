@@ -31,7 +31,7 @@ Use the `sonar` CLI for every coding task. Do not use the SonarQube MCP server t
 - Repeat until introduced findings are clean, or state clearly why a non-blocking
   issue remains.
 - Before adding or upgrading any third-party package, run
-  `sonar context dependencies check --purl "pkg:pypi/<name>@<version>"`.
+  `sonar context dependencies check --purl "pkg:npm/<name>@<version>"`.
 - Do not commit, push, or open a pull request unless explicitly asked.
 
 ## End-of-Task Check
@@ -46,8 +46,8 @@ Before replying, ensure every source file changed in this task was analyzed with
  
 ## Environment notes
 
-- This is a Python project (FastAPI + pytest).
-- SonarQube Cloud org: `suresh-demo`; project key: `Suresh-Rukal-Sonar_library-loan-api`.
+- This is a TypeScript project (Bun runtime, bun test).
+- SonarQube Cloud org: `sonarcloud-demos`; project key: `SonarCloud-Demos_jimhalkyard-kudos`.
 - Auth lives in the OS keychain; check with `sonar auth status`.
 <!-- sonar:begin:sonarqube-agentic-analysis-protocol -->
 # Sonar CLI Workflow
@@ -83,7 +83,7 @@ Use the `sonar` CLI for every coding task. Do not use the SonarQube MCP server t
 - Repeat until introduced findings are clean, or state clearly why a non-blocking
   issue remains.
 - Before adding or upgrading any third-party package, run
-  `sonar context dependencies check --purl "pkg:pypi/<name>@<version>"`.
+  `sonar context dependencies check --purl "pkg:npm/<name>@<version>"`.
 - Do not commit, push, or open a pull request unless explicitly asked.
 
 ## End-of-Task Check
