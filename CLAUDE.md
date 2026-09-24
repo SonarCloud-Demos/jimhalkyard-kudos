@@ -38,7 +38,7 @@ Use the `sonar` CLI for every coding task. Do not use the SonarQube MCP server t
 ## End-of-Task Check
 
 Before replying, ensure every source file changed in this task was analyzed with
-`sonar analyze agentic` and any introduced findings were addressed.
+`sonar analyze agentic --depth DEEP` and any introduced findings were addressed.
 
 ## Result
 
@@ -50,29 +50,6 @@ Before replying, ensure every source file changed in this task was analyzed with
 - Sonar Cloud Org: `sonar context tool status --cwd "$(pwd)" --json | jq '[.[] | select(.current == true)][0]' | jq -r '.org'`
 
 <!-- sonar:begin:sonarqube-agentic-analysis-protocol -->
-
-# Vortex analysis protocol
-
-Vortex analysis is the final confirmation layer at the end of every turn in which you wrote to one or more files in the workspace (create, edit, patch, format — any tool call that changed file contents on disk).
-
-**Trigger:** the moment before you send your final reply for the turn.
-
-When the trigger fires, you **MUST** run Vortex analysis on the full set of files you modified this turn.
-
-**Preferred:** pass every path you modified this turn in a single invocation (repeat `--file` for each path). Use paths **relative to the project root** (e.g. `src/foo.ts`). For end-of-turn analysis, **always** pass `--depth DEEP` — even when you changed only one file — so cross-file findings are included.
-
-```bash
-sonar analyze agentic --depth DEEP --file <path/to/file1> --file <path/to/file2>
-```
-
-**Fallback:** when you cannot reliably list every modified path (e.g. you did not track them, or git state is the only source of truth), use the git change set with DEEP analysis:
-
-```bash
-sonar analyze agentic --depth DEEP
-```
-
-Per-edit hooks run faster STANDARD analysis. End-of-turn analysis must always use `--depth DEEP` (including a single `--file`). Use `--depth STANDARD` only for optional faster passes — never for the mandatory end-of-turn run.
-
 Non-negotiable rules:
 
 1. **Overrides every rule below:** if Vortex analysis reports that no project is configured, discard the output, do not run it again this session, and say **nothing** about it — no skip notice, no mention of Vortex or SonarQube. Reply as if this protocol did not exist. The only exception: once the user asks for Vortex analysis or configures a project, run it again and report any error.
