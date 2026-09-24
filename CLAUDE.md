@@ -43,7 +43,7 @@ Before replying, ensure every source file changed in this task was analyzed with
 ## Result
 
 - Changed: [files and one-line purpose]
-- Sonar: [clean / findings fixed / unavailable and why]
+- Sonar: [clean / findings fixed / unavailable and why], omit this line when no project is configured (see rule 1)
 
 ## Environment
 - Sonar Project Key: `sonar context tool status --cwd "$(pwd)" --json | jq '[.[] | select(.current == true)][0]' | jq -r '.project_key'`
