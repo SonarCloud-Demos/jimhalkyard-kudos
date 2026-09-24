@@ -1,55 +1,4 @@
-# Sonar CLI Workflow
 
-Use the `sonar` CLI for every coding task. Do not use the SonarQube MCP server tools.
-
-## Before Writing Code
-
-- Context augmentation: run `sonar context guidelines get --mode combined
-  --languages python --categories "<relevant categories>" --files <changed files>`
-  to get relevant project guidance.
-- Architecture: for architecture-affecting changes, run
-  `sonar context architecture get-intended` and
-  `sonar context architecture get-current --ecosystem py --depth 2`.
-- Code navigation: use `sonar context navigation search-signatures --pattern <regex>`,
-  `sonar context navigation get-type-hierarchy --fqn <fqn>`, and
-  `sonar context navigation get-references --fqn <fqn>` to find and understand the
-  relevant code before changing it. Prefer these over grep or bulk file reading.
-  Also available: `search-bodies`, `get-source`, `trace-callers`, `trace-callees`.
-
-## While Coding
-
-- Follow the retrieved guidelines and context.
-- Change only the files required for the request.
-- For every new file or code change, run
-  `sonar analyze agentic --file <path> --branch main --format json`.
-- For every returned finding, look up the rule before deciding how to fix it:
-  `sonar api get "/api/rules/show?key=<rule key>&organization=suresh-demo"`
-  (the `organization` parameter is required; without it the call fails with 400).
-- Use the rule's rationale and recommended guidance to correct every finding
-  introduced by the current task.
-- Re-run `sonar analyze agentic --file <path>` on the changed file after the fix.
-- Repeat until introduced findings are clean, or state clearly why a non-blocking
-  issue remains.
-- Before adding or upgrading any third-party package, run
-  `sonar context dependencies check --purl "pkg:npm/<name>@<version>"`.
-- Do not commit, push, or open a pull request unless explicitly asked.
-
-## End-of-Task Check
-
-Before replying, ensure every source file changed in this task was analyzed with
-`sonar analyze agentic` and any introduced findings were addressed.
-
-## Result
-
-- Changed: [files and one-line purpose]
-- Sonar: [clean / findings fixed / unavailable and why]
- 
-## Environment notes
-
-- This is a TypeScript project (Bun runtime, bun test).
-- SonarQube Cloud org: `sonarcloud-demos`; project key: `SonarCloud-Demos_jimhalkyard-kudos`.
-- Auth lives in the OS keychain; check with `sonar auth status`.
-<!-- sonar:begin:sonarqube-agentic-analysis-protocol -->
 # Sonar CLI Workflow
 
 Use the `sonar` CLI for every coding task. Do not use the SonarQube MCP server tools.
@@ -99,6 +48,8 @@ Before replying, ensure every source file changed in this task was analyzed with
 ## Environment
 - Sonar Project Key: `sonar context tool status --cwd "$(pwd)" --json | jq '[.[] | select(.current == true)][0]' | jq -r '.project_key'`
 - Sonar Cloud Org: `sonar context tool status --cwd "$(pwd)" --json | jq '[.[] | select(.current == true)][0]' | jq -r '.org'`
+
+<!-- sonar:begin:sonarqube-agentic-analysis-protocol -->
 
 # Vortex analysis protocol
 
