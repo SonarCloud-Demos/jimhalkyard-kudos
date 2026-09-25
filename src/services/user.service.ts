@@ -68,7 +68,13 @@ export function updateUserStatus(userId: number, isActive: boolean): User {
   }
 
   const stmt = db.prepare('UPDATE users SET is_active = ? WHERE id = ?');
-  stmt.run(isActive ? 1 : 0, userId);
+  let isActiveValue: number;
+  if (isActive) {
+    isActiveValue = 1;
+  } else {
+    isActiveValue = 0;
+  }
+  stmt.run(isActiveValue, userId);
 
   const updatedUser = getUserById(userId);
   if (!updatedUser) {
