@@ -178,6 +178,6 @@ async function seed() {
 try {
   await seed();
 } catch (error) {
-  console.info('Seed failed:', error);
+  console.error('Seed failed:', error);
   process.exit(1);
 }
