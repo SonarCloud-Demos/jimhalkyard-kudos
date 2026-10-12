@@ -155,4 +155,4 @@ function getVisibilityBadge(visibility) {
   return badges[visibility] || '';
 }
 
-loadAdmin();
+await loadAdmin();

@@ -119,4 +119,4 @@ document.getElementById('feedback-form').addEventListener('submit', async (e) =>
   }
 });
 
-loadFeedback();
+await loadFeedback();

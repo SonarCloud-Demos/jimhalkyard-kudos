@@ -121,4 +121,4 @@ document.getElementById('kudos-form').addEventListener('submit', async (e) => {
   }
 });
 
-loadKudos();
+await loadKudos();

@@ -175,7 +175,9 @@ async function seed() {
   db.close();
 }
 
-seed().catch((error) => {
-  console.error('Seed failed:', error);
+try {
+  await seed();
+} catch (error) {
+  console.info('Seed failed:', error);
   process.exit(1);
-});
+}
