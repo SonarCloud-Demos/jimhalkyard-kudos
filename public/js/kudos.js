@@ -121,4 +121,6 @@ document.getElementById('kudos-form').addEventListener('submit', async (e) => {
   }
 });
 
-loadKudos();
+window.openModal = openModal;
+window.closeModal = closeModal;
+await loadKudos();

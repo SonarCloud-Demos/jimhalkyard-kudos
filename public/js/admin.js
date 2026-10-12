@@ -155,4 +155,5 @@ function getVisibilityBadge(visibility) {
   return badges[visibility] || '';
 }
 
-loadAdmin();
+window.toggleUserStatus = toggleUserStatus;
+await loadAdmin();

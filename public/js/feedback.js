@@ -119,4 +119,6 @@ document.getElementById('feedback-form').addEventListener('submit', async (e) =>
   }
 });
 
-loadFeedback();
+window.openModal = openModal;
+window.closeModal = closeModal;
+await loadFeedback();
