@@ -8,37 +8,47 @@ export class AppError extends Error {
   }
 }
 
+const HTTP_BAD_REQUEST = 400;
+
 export class ValidationError extends AppError {
   constructor(message: string) {
-    super(400, message);
+    super(HTTP_BAD_REQUEST, message);
     Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }
 
+const HTTP_STATUS_UNAUTHORIZED = 401;
+
 export class UnauthorizedError extends AppError {
   constructor(message: string = 'Unauthorized') {
-    super(401, message);
+    super(HTTP_STATUS_UNAUTHORIZED, message);
     Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 }
 
+const HTTP_STATUS_FORBIDDEN = 403;
+
 export class ForbiddenError extends AppError {
   constructor(message: string = 'Forbidden') {
-    super(403, message);
+    super(HTTP_STATUS_FORBIDDEN, message);
     Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
 }
 
+const HTTP_STATUS_NOT_FOUND = 404;
+
 export class NotFoundError extends AppError {
   constructor(message: string = 'Resource not found') {
-    super(404, message);
+    super(HTTP_STATUS_NOT_FOUND, message);
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }
 
+const HTTP_STATUS_CONFLICT = 409;
+
 export class ConflictError extends AppError {
   constructor(message: string) {
-    super(409, message);
+    super(HTTP_STATUS_CONFLICT, message);
     Object.setPrototypeOf(this, ConflictError.prototype);
   }
 }
