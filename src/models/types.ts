@@ -81,9 +81,11 @@ export const createKudosSchema = z.object({
   message: z.string().min(1, 'Message is required').max(1000, 'Message too long'),
 });
 
+const MAX_FEEDBACK_MESSAGE_LENGTH = 2000;
+
 export const createFeedbackSchema = z.object({
   targetDepartment: z.string().min(1, 'Target department is required').max(100),
-  message: z.string().min(1, 'Message is required').max(2000, 'Message too long'),
+  message: z.string().min(1, 'Message is required').max(MAX_FEEDBACK_MESSAGE_LENGTH, 'Message too long'),
   isAnonymous: z.boolean().default(false),
   visibility: z.enum(['PUBLIC', 'MANAGER_ONLY', 'HR_ONLY']),
 });
