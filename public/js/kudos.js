@@ -67,6 +67,7 @@ async function loadKudosFeed() {
           </div>
         </div>
         <div class="card-content">${kudos.message}</div>
+        ${renderCardImage('/api/kudos', kudos.id, kudos.image_path, 'Image attached to this kudos')}
         <div class="card-footer">
           <span>${formatDate(kudos.created_at)}</span>
         </div>
@@ -101,11 +102,26 @@ document.getElementById('kudos-form').addEventListener('submit', async (e) => {
     return;
   }
 
+  const imageFile = document.getElementById('image').files[0];
+  const imageError = validateImageFile(imageFile);
+
+  if (imageError) {
+    showError('modal-error', imageError);
+    return;
+  }
+
+  // The browser sets the multipart Content-Type (with boundary) for FormData
+  const formData = new FormData();
+  formData.append('recipientId', recipientId);
+  formData.append('message', message);
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
   try {
     const response = await fetch('/api/kudos', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ recipientId, message }),
+      body: formData,
     });
 
     const data = await response.json();

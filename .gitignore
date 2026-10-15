@@ -173,3 +173,6 @@ Thumbs.db
 # Claude
 .claude/settings.local*
 
+
+# Uploaded images
+uploads/
