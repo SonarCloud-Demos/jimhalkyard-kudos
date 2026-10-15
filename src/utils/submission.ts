@@ -14,7 +14,11 @@ export async function parseSubmissionBody(c: Context): Promise<SubmissionBody> {
   const contentType = c.req.header('content-type') ?? '';
 
   if (!contentType.includes('multipart/form-data')) {
-    return { fields: await c.req.json(), image: null };
+    const json = await c.req.json();
+    if (json === null || typeof json !== 'object' || Array.isArray(json)) {
+      throw new ValidationError('Request body must be a JSON object');
+    }
+    return { fields: json as Record<string, unknown>, image: null };
   }
 
   const { image, ...fields } = await c.req.parseBody();
