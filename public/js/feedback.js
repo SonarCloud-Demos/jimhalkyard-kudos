@@ -48,6 +48,7 @@ async function loadFeedbackList() {
             ${visibilityBadge}
           </div>
           <div class="card-content">${feedback.message}</div>
+          ${renderCardImage('/api/feedback', feedback.id, feedback.image_path, 'Image attached to this feedback')}
           <div class="card-footer">
             <span>${formatDate(feedback.created_at)}</span>
           </div>
@@ -94,16 +95,28 @@ document.getElementById('feedback-form').addEventListener('submit', async (e) =>
     return;
   }
 
+  const imageFile = document.getElementById('image').files[0];
+  const imageError = validateImageFile(imageFile);
+
+  if (imageError) {
+    showError('modal-error', imageError);
+    return;
+  }
+
+  // The browser sets the multipart Content-Type (with boundary) for FormData
+  const formData = new FormData();
+  formData.append('targetDepartment', targetDepartment);
+  formData.append('message', message);
+  formData.append('isAnonymous', isAnonymous);
+  formData.append('visibility', visibility);
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
   try {
     const response = await fetch('/api/feedback', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        targetDepartment,
-        message,
-        isAnonymous,
-        visibility,
-      }),
+      body: formData,
     });
 
     const data = await response.json();
