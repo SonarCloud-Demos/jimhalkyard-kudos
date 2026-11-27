@@ -6,7 +6,8 @@ import { getUserById } from './user.service';
 export function createKudos(
   authorId: number,
   recipientId: number,
-  message: string
+  message: string,
+  imagePath: string | null = null
 ): KudosPost {
   const db = getDatabase();
 
@@ -16,10 +17,10 @@ export function createKudos(
   }
 
   const stmt = db.prepare(
-    'INSERT INTO kudos_posts (author_id, recipient_id, message) VALUES (?, ?, ?)'
+    'INSERT INTO kudos_posts (author_id, recipient_id, message, image_path) VALUES (?, ?, ?, ?)'
   );
 
-  const result = stmt.run(authorId, recipientId, message);
+  const result = stmt.run(authorId, recipientId, message, imagePath);
 
   const kudos = db
     .prepare('SELECT * FROM kudos_posts WHERE id = ?')

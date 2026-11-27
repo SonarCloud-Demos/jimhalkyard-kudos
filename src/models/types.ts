@@ -30,6 +30,7 @@ export interface KudosPost {
   author_id: number;
   recipient_id: number;
   message: string;
+  image_path?: string | null;
   is_public: number;
   created_at: string;
 }
@@ -47,6 +48,7 @@ export interface FeedbackPost {
   author_id: number | null;
   target_department: string;
   message: string;
+  image_path?: string | null;
   is_anonymous: number;
   visibility: FeedbackVisibility;
   created_at: string;
