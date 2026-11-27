@@ -8,22 +8,21 @@ export function createFeedback(
   targetDepartment: string,
   message: string,
   isAnonymous: boolean,
-  visibility: FeedbackVisibility
-): FeedbackPost {
+  visibility: FeedbackVisibility,
+  imagePath: string | null = null): FeedbackPost {
   const db = getDatabase();
 
-  const actualAuthorId = isAnonymous ? null : authorId;
-
   const stmt = db.prepare(
-    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility) VALUES (?, ?, ?, ?, ?)'
+    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, image_path) VALUES (?, ?, ?, ?, ?, ?)'
   );
 
   const result = stmt.run(
-    actualAuthorId,
+    authorId,
     targetDepartment,
     message,
     isAnonymous ? 1 : 0,
-    visibility
+    visibility,
+    imagePath
   );
 
   const feedback = db
@@ -44,7 +43,7 @@ export function getFeedbackVisibleToUser(user: User): FeedbackPostWithAuthor[] {
     LEFT JOIN users u ON f.author_id = u.id
     WHERE 1=1
   `;
-  const params: any[] = [];
+  const params: string[] = [];
 
   if (user.role === 'HR_ADMIN') {
     // HR admins see everything
@@ -139,7 +138,7 @@ export function getFeedbackByDepartment(
     LEFT JOIN users u ON f.author_id = u.id
     WHERE f.target_department = ?
   `;
-  const params: any[] = [department];
+  const params: string[] = [department];
 
   if (user.role === 'HR_ADMIN') {
     // HR admins see everything for the department

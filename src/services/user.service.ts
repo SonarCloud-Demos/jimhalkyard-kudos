@@ -7,8 +7,7 @@ export function createUser(
   email: string,
   hashedPassword: string,
   department: string,
-  role: string = 'EMPLOYEE'
-): User {
+  role: string = 'EMPLOYEE'): User {
   const db = getDatabase();
 
   const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
@@ -17,8 +16,7 @@ export function createUser(
   }
 
   const stmt = db.prepare(
-    'INSERT INTO users (name, email, hashed_password, role, department) VALUES (?, ?, ?, ?, ?)'
-  );
+    'INSERT INTO users (name, email, hashed_password, role, department) VALUES (?, ?, ?, ?, ?)');
 
   const result = stmt.run(name, email, hashedPassword, role, department);
 
@@ -51,12 +49,9 @@ export function getAllUsers(): SafeUser[] {
 
 export function getUsersByDepartment(department: string): SafeUser[] {
   const db = getDatabase();
-  const users = db
-    .prepare(
-      'SELECT id, name, email, role, department, is_active, created_at FROM users WHERE department = ? ORDER BY name'
-    )
+  return db
+    .prepare('SELECT id, name, email, role, department, is_active, created_at FROM users WHERE department = ? ORDER BY name')
     .all(department) as SafeUser[];
-  return users;
 }
 
 export function updateUserStatus(userId: number, isActive: boolean): User {
@@ -68,7 +63,13 @@ export function updateUserStatus(userId: number, isActive: boolean): User {
   }
 
   const stmt = db.prepare('UPDATE users SET is_active = ? WHERE id = ?');
-  stmt.run(isActive ? 1 : 0, userId);
+  let isActiveValue: number;
+  if (isActive) {
+    isActiveValue = 1;
+  } else {
+    isActiveValue = 0;
+  }
+  stmt.run(isActiveValue, userId);
 
   const updatedUser = getUserById(userId);
   if (!updatedUser) {
@@ -85,10 +86,7 @@ export function toSafeUser(user: User): SafeUser {
 
 export function getActiveUsersByDepartment(department: string): SafeUser[] {
   const db = getDatabase();
-  const users = db
-    .prepare(
-      'SELECT id, name, email, role, department, is_active, created_at FROM users WHERE department = ? AND is_active = 1 ORDER BY name'
-    )
+  return db
+    .prepare('SELECT id, name, email, role, department, is_active, created_at FROM users WHERE department = ? AND is_active = 1 ORDER BY name')
     .all(department) as SafeUser[];
-  return users;
 }

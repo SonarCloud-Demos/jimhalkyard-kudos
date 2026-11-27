@@ -1,6 +1,6 @@
 {
   "name": "kudos-portal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Internal Employee Feedback & Kudos Portal",
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "test": "bun test"
   },
   "dependencies": {
-    "hono": "^4.13.7",
+    "hono": "^4.13.16",
     "jose": "^6.2.12",
     "zod": "^4.5.4"
   },

@@ -9,6 +9,9 @@ import feedbackRoutes from './routes/feedback.routes';
 import adminRoutes from './routes/admin.routes';
 import { AppError } from './utils/errors';
 
+const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
+const HTTP_STATUS_NOT_FOUND = 404;
+
 const app = new Hono();
 
 initDatabase();
@@ -30,7 +33,7 @@ app.route('/api/feedback', feedbackRoutes);
 app.route('/api/admin', adminRoutes);
 
 app.onError((err, c) => {
-  console.error('Error:', err);
+  process.stderr.write(`Error: ${err.stack ?? String(err)}\n`);
 
   if (err instanceof AppError) {
     return c.json(
@@ -47,7 +50,7 @@ app.onError((err, c) => {
       success: false,
       error: 'Internal server error',
     },
-    500
+    HTTP_STATUS_INTERNAL_SERVER_ERROR
   );
 });
 
@@ -57,7 +60,7 @@ app.notFound((c) => {
       success: false,
       error: 'Not found',
     },
-    404
+    HTTP_STATUS_NOT_FOUND
   );
 });
 
