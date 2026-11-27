@@ -37,27 +37,18 @@ app.onError((err, c) => {
 
   if (err instanceof AppError) {
     return c.json(
-      {
-        success: false,
-        error: err.message,
-      },
+      { success: false, error: err.message },
       err.statusCode);
   }
 
   return c.json(
-    {
-      success: false,
-      error: 'Internal server error',
-    },
+    { success: false, error: 'Internal server error' },
     HTTP_STATUS_INTERNAL_SERVER_ERROR);
 });
 
-app.notFound((c) => {
+app.notFound(c => {
   return c.json(
-    {
-      success: false,
-      error: 'Not found',
-    },
+    { success: false, error: 'Not found' },
     HTTP_STATUS_NOT_FOUND);
 });
 
@@ -70,7 +61,4 @@ console.info(`   - Kudos:      http://localhost:${port}/kudos`);
 console.info(`   - Feedback:   http://localhost:${port}/feedback`);
 console.info(`   - Admin:      http://localhost:${port}/admin\n`);
 
-export default {
-  port,
-  fetch: app.fetch,
-};
+export default { port, fetch: app.fetch };

@@ -9,12 +9,12 @@ const admin = new Hono();
 
 admin.use('*', authenticate, requireRole('HR_ADMIN'));
 
-admin.get('/users', (c) => {
+admin.get('/users', c => {
   const users = getAllUsers();
   return c.json({ users });
 });
 
-admin.patch('/users/:id/status', async (c) => {
+admin.patch('/users/:id/status', async c => {
   const id = Number.parseInt(c.req.param('id'), 10);
 
   if (Number.isNaN(id)) {
