@@ -50,7 +50,7 @@ describe('Auth Service', () => {
 
       expect(token).toBeDefined();
       expect(typeof token).toBe('string');
-      expect(token.split('.').length).toBe(3);
+      expect(token.split('.')).toHaveLength(3);
     });
 
     test('should verify valid JWT and extract payload', async () => {
