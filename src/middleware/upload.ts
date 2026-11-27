@@ -8,5 +8,4 @@ export const limitUploadSize = bodyLimit({
   maxSize: MAX_UPLOAD_REQUEST_BYTES,
   onError: () => {
     throw new AppError(PAYLOAD_TOO_LARGE, 'Request too large. Images must not exceed 2MB');
-  },
-});
+  } });

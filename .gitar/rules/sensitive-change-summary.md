@@ -2,13 +2,13 @@
 title: Sensitive change summary
 description: Provide impact summary and testing suggestions for changes to sensitive paths
 type: automation
-when: Changes affect src/routes/auth.routes.ts, src/routes/admin.routes.ts, src/services/auth.service.ts, src/middleware/, or src/db/schema.sql (authorisation, schema, secrets handling)
+when: Changes affect src/routes/, src/middleware/, src/services/auth.service.ts, src/db/, or any path containing auth/, secrets/ or payments/ (authorisation, schema, secrets handling)
 actions: Post one advisory comment summarising impact, suggested tests and reviewers
 ---
 
 # Sensitive change summary
 
-When a pull request modifies files under sensitive paths such as `auth/`, `secrets/`, or `payments/` (authorisation logic, payment processing, database schema, secrets handling, cryptography), provide an advisory summary to help reviewers assess impact.
+When a pull request modifies files under sensitive paths such as `routes/`, `middleware`, `auth`, `secrets/`, `payments/`, or `src/db/` (authorisation logic, payment processing, database schema, secrets handling, cryptography), provide an advisory summary to help reviewers assess impact.
 
 ## Sensitive paths typically include
 
