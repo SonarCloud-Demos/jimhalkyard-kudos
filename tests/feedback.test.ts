@@ -63,7 +63,7 @@ describe('Feedback Visibility', () => {
     `;
 
     const feedback = db.prepare(query).all();
-    expect(feedback.length).toBe(1);
+    expect(feedback).toHaveLength(1);
   });
 
   test('manager can see PUBLIC and MANAGER_ONLY for their department', () => {
@@ -74,13 +74,13 @@ describe('Feedback Visibility', () => {
     `;
 
     const feedback = db.prepare(query).all('Engineering');
-    expect(feedback.length).toBe(2);
+    expect(feedback).toHaveLength(2);
   });
 
   test('HR admin can see all feedback', () => {
     const query = 'SELECT * FROM feedback_posts';
     const feedback = db.prepare(query).all();
-    expect(feedback.length).toBe(3);
+    expect(feedback).toHaveLength(3);
   });
 
   test('anonymous feedback hides author_id', () => {
@@ -117,6 +117,6 @@ describe('Feedback Visibility', () => {
     const feedback = db.prepare(query).all('Engineering');
     const marketingFeedback = feedback.filter((f: any) => f.target_department === 'Marketing');
 
-    expect(marketingFeedback.length).toBe(0);
+    expect(marketingFeedback).toHaveLength(0);
   });
 });
