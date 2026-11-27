@@ -2,7 +2,7 @@ export class AppError extends Error {
   constructor(
     public statusCode: number,
     public message: string,
-    public isOperational: boolean = true) {
+    public isOperational = true) {
     super(message);
     Object.setPrototypeOf(this, AppError.prototype);
   }
@@ -20,7 +20,7 @@ export class ValidationError extends AppError {
 const HTTP_STATUS_UNAUTHORIZED = 401;
 
 export class UnauthorizedError extends AppError {
-  constructor(message: string = 'Unauthorized') {
+  constructor(message = 'Unauthorized') {
     super(HTTP_STATUS_UNAUTHORIZED, message);
     Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
@@ -29,7 +29,7 @@ export class UnauthorizedError extends AppError {
 const HTTP_STATUS_FORBIDDEN = 403;
 
 export class ForbiddenError extends AppError {
-  constructor(message: string = 'Forbidden') {
+  constructor(message = 'Forbidden') {
     super(HTTP_STATUS_FORBIDDEN, message);
     Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
@@ -38,7 +38,7 @@ export class ForbiddenError extends AppError {
 const HTTP_STATUS_NOT_FOUND = 404;
 
 export class NotFoundError extends AppError {
-  constructor(message: string = 'Resource not found') {
+  constructor(message = 'Resource not found') {
     super(HTTP_STATUS_NOT_FOUND, message);
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
