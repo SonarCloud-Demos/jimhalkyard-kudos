@@ -5,8 +5,7 @@ const CLIENT_ERROR_STATUS = 400;
 
 export async function logger(c: Context, next: Next) {
   const start = Date.now();
-  const method = c.req.method;
-  const path = c.req.path;
+  const { method, path } = c.req;
 
   await next();
 
