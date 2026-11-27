@@ -62,7 +62,7 @@ feedback.get('/', (c) => {
   return c.json({ feedback: feedbackPosts });
 });
 
-feedback.get('/:id', (c) => {
+feedback.get('/:id', c => {
   const user = c.get('user');
   const id = Number.parseInt(c.req.param('id'), 10);
 
@@ -74,7 +74,7 @@ feedback.get('/:id', (c) => {
   return c.json({ feedback: feedbackPost });
 });
 
-feedback.get('/:id/image', async (c) => {
+feedback.get('/:id/image', async c => {
   const user = c.get('user');
   const id = Number.parseInt(c.req.param('id'), 10);
 
@@ -95,12 +95,10 @@ feedback.get('/:id/image', async (c) => {
     headers: {
       'Content-Type': contentType,
       'X-Content-Type-Options': 'nosniff',
-      'Cache-Control': 'private, no-cache',
-    },
-  });
+      'Cache-Control': 'private, no-cache' } });
 });
 
-feedback.get('/department/:department', (c) => {
+feedback.get('/department/:department', c => {
   const user = c.get('user');
   const department = c.req.param('department');
 
