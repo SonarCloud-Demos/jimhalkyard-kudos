@@ -7,7 +7,7 @@ export function createUser(
   email: string,
   hashedPassword: string,
   department: string,
-  role: string = 'EMPLOYEE'): User {
+  role = 'EMPLOYEE'): User {
   const db = getDatabase();
 
   const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
@@ -20,11 +20,9 @@ export function createUser(
 
   const result = stmt.run(name, email, hashedPassword, role, department);
 
-  const user = db
+  return db
     .prepare('SELECT * FROM users WHERE id = ?')
     .get(result.lastInsertRowid) as User;
-
-  return user;
 }
 
 export function getUserById(id: number): User | null {
@@ -41,10 +39,9 @@ export function getUserByEmail(email: string): User | null {
 
 export function getAllUsers(): SafeUser[] {
   const db = getDatabase();
-  const users = db
+  return db
     .prepare('SELECT id, name, email, role, department, is_active, created_at FROM users ORDER BY name')
     .all() as SafeUser[];
-  return users;
 }
 
 export function getUsersByDepartment(department: string): SafeUser[] {
