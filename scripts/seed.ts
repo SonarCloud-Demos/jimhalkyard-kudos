@@ -83,33 +83,28 @@ async function seed() {
 
   // Insert sample kudos posts
   const insertKudos = db.prepare(
-    'INSERT INTO kudos_posts (author_id, recipient_id, message) VALUES (?, ?, ?)'
-  );
+    'INSERT INTO kudos_posts (author_id, recipient_id, message) VALUES (?, ?, ?)');
 
   insertKudos.run(
     1,
     2,
-    'Great job on the new feature release! Your attention to detail made all the difference.'
-  );
+    'Great job on the new feature release! Your attention to detail made all the difference.');
 
   insertKudos.run(
     2,
     1,
-    'Thanks for helping me debug that tricky issue yesterday. Much appreciated!'
-  );
+    'Thanks for helping me debug that tricky issue yesterday. Much appreciated!');
 
   insertKudos.run(
     4,
     1,
-    'Outstanding work on the project presentation. Well done!'
-  );
+    'Outstanding work on the project presentation. Well done!');
 
   console.info('✓ Sample kudos posts created');
 
   // Insert sample feedback posts
   const insertFeedback = db.prepare(
-    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility) VALUES (?, ?, ?, ?, ?)'
-  );
+    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility) VALUES (?, ?, ?, ?, ?)');
 
   // Public feedback
   insertFeedback.run(
@@ -117,8 +112,7 @@ async function seed() {
     'Engineering',
     'The new development tools have significantly improved our productivity.',
     0,
-    'PUBLIC'
-  );
+    'PUBLIC');
 
   // Manager-only feedback
   insertFeedback.run(
@@ -126,8 +120,7 @@ async function seed() {
     'Engineering',
     'We need better code review processes. Some PRs are sitting for days without feedback.',
     0,
-    'MANAGER_ONLY'
-  );
+    'MANAGER_ONLY');
 
   // Anonymous feedback
   insertFeedback.run(
@@ -135,17 +128,16 @@ async function seed() {
     'Engineering',
     'The on-call rotation is too heavy. We need more people in the rotation.',
     1,
-    'MANAGER_ONLY'
-  );
+    'MANAGER_ONLY');
 
   // HR-only feedback
+  const charlieUserId = 3;
   insertFeedback.run(
-    3,
+    charlieUserId,
     'Marketing',
     'There are concerns about work-life balance in the Marketing department.',
     0,
-    'HR_ONLY'
-  );
+    'HR_ONLY');
 
   // Anonymous complaint to HR
   insertFeedback.run(
@@ -153,8 +145,7 @@ async function seed() {
     'Human Resources',
     'There have been some unprofessional behaviors in team meetings that need to be addressed.',
     1,
-    'HR_ONLY'
-  );
+    'HR_ONLY');
 
   console.info('✓ Sample feedback posts created');
 
