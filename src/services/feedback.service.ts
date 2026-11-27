@@ -13,17 +13,22 @@ export function createFeedback(
   const db = getDatabase();
 
   const stmt = db.prepare(
-    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, image_path) VALUES (?, ?, ?, ?, ?, ?)'
-  );
+    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, image_path) VALUES (?, ?, ?, ?, ?, ?)');
+
+  let isAnonymousValue: number;
+  if (isAnonymous) {
+    isAnonymousValue = 1;
+  } else {
+    isAnonymousValue = 0;
+  }
 
   const result = stmt.run(
     authorId,
     targetDepartment,
     message,
-    isAnonymous ? 1 : 0,
+    isAnonymousValue,
     visibility,
-    imagePath
-  );
+    imagePath);
 
   const feedback = db
     .prepare('SELECT * FROM feedback_posts WHERE id = ?')
@@ -85,8 +90,7 @@ export function getFeedbackById(id: number, user: User): FeedbackPostWithAuthor 
         u.name as author_name
       FROM feedback_posts f
       LEFT JOIN users u ON f.author_id = u.id
-      WHERE f.id = ?`
-    )
+      WHERE f.id = ?`)
     .get(id) as FeedbackPostWithAuthor | undefined;
 
   if (!feedback) {
@@ -110,24 +114,20 @@ export function getFeedbackById(id: number, user: User): FeedbackPostWithAuthor 
 export function getAllFeedbackForAdmin(): FeedbackPostWithAuthor[] {
   const db = getDatabase();
 
-  const feedbacks = db
+  return db
     .prepare(
       `SELECT
         f.*,
         u.name as author_name
       FROM feedback_posts f
       LEFT JOIN users u ON f.author_id = u.id
-      ORDER BY f.created_at DESC`
-    )
+      ORDER BY f.created_at DESC`)
     .all() as FeedbackPostWithAuthor[];
-
-  return feedbacks;
 }
 
 export function getFeedbackByDepartment(
   department: string,
-  user: User
-): FeedbackPostWithAuthor[] {
+  user: User): FeedbackPostWithAuthor[] {
   const db = getDatabase();
 
   let query = `
