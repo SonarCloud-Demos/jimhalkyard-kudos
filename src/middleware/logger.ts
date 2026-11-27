@@ -1,5 +1,8 @@
 import type { Context, Next } from 'hono';
 
+const SERVER_ERROR_STATUS = 500;
+const CLIENT_ERROR_STATUS = 400;
+
 export async function logger(c: Context, next: Next) {
   const start = Date.now();
   const method = c.req.method;
@@ -10,7 +13,14 @@ export async function logger(c: Context, next: Next) {
   const elapsed = Date.now() - start;
   const status = c.res.status;
 
-  const logColor = status >= 500 ? '\x1b[31m' : status >= 400 ? '\x1b[33m' : '\x1b[32m';
+  let logColor: string;
+  if (status >= SERVER_ERROR_STATUS) {
+    logColor = '\x1b[31m';
+  } else if (status >= CLIENT_ERROR_STATUS) {
+    logColor = '\x1b[33m';
+  } else {
+    logColor = '\x1b[32m';
+  }
   const resetColor = '\x1b[0m';
 
 
