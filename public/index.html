@@ -146,6 +146,8 @@
           showError(data.error || 'Login failed');
         }
       } catch (error) {
+        // Details go to the console; users get a generic message because
+        // server-side errors are already surfaced via data.error above.
         console.error('Login request failed:', error);
         showError('Network error. Please try again.');
       }
@@ -176,6 +178,8 @@
           showError(data.error || 'Registration failed');
         }
       } catch (error) {
+        // Details go to the console; users get a generic message because
+        // server-side errors are already surfaced via data.error above.
         console.error('Registration request failed:', error);
         showError('Network error. Please try again.');
       }

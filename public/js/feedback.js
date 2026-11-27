@@ -128,8 +128,10 @@ document.getElementById('feedback-form').addEventListener('submit', async (e) =>
       showError('modal-error', data.error || 'Failed to submit feedback');
     }
   } catch (error) {
+    // Details go to the console; users get a generic message because
+    // server-side errors are already surfaced via data.error above.
     console.error('Failed to submit feedback:', error);
-    showError('modal-error', error.message || 'Network error. Please try again.');
+    showError('modal-error', 'Network error. Please try again.');
   }
 });
 

@@ -98,8 +98,10 @@ async function toggleUserStatus(userId, isActive) {
       alert(data.error || `Failed to ${action} user`);
     }
   } catch (error) {
+    // Details go to the console; users get a generic message because
+    // server-side errors are already surfaced via data.error above.
     console.error(`Failed to ${action} user:`, error);
-    alert(error.message || 'Network error. Please try again.');
+    alert('Network error. Please try again.');
   }
 }
 
