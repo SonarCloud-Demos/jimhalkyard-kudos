@@ -42,8 +42,7 @@ feedback.post('/', limitUploadSize, async (c) => {
       message,
       isAnonymous,
       visibility,
-      imagePath
-    );
+      imagePath);
 
     return c.json({
       success: true,

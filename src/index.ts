@@ -41,8 +41,7 @@ app.onError((err, c) => {
         success: false,
         error: err.message,
       },
-      err.statusCode
-    );
+      err.statusCode);
   }
 
   return c.json(
@@ -50,8 +49,7 @@ app.onError((err, c) => {
       success: false,
       error: 'Internal server error',
     },
-    HTTP_STATUS_INTERNAL_SERVER_ERROR
-  );
+    HTTP_STATUS_INTERNAL_SERVER_ERROR);
 });
 
 app.notFound((c) => {
@@ -60,8 +58,7 @@ app.notFound((c) => {
       success: false,
       error: 'Not found',
     },
-    HTTP_STATUS_NOT_FOUND
-  );
+    HTTP_STATUS_NOT_FOUND);
 });
 
 const port = Number.parseInt(process.env.PORT || '3000', 10);
