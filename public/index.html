@@ -146,6 +146,7 @@
           showError(data.error || 'Login failed');
         }
       } catch (error) {
+        console.error('Login request failed:', error);
         showError('Network error. Please try again.');
       }
     });
@@ -175,6 +176,7 @@
           showError(data.error || 'Registration failed');
         }
       } catch (error) {
+        console.error('Registration request failed:', error);
         showError('Network error. Please try again.');
       }
     });

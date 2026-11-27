@@ -133,6 +133,7 @@ document.getElementById('kudos-form').addEventListener('submit', async (e) => {
       showError('modal-error', data.error || 'Failed to submit kudos');
     }
   } catch (error) {
+    console.error('Failed to submit kudos:', error);
     showError('modal-error', 'Network error. Please try again.');
   }
 });
