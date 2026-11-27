@@ -31,8 +31,7 @@ async function seed() {
 
   // Insert sample users
   const insertUser = db.prepare(
-    'INSERT INTO users (name, email, hashed_password, role, department) VALUES (?, ?, ?, ?, ?)'
-  );
+    'INSERT INTO users (name, email, hashed_password, role, department) VALUES (?, ?, ?, ?, ?)');
 
   // Employee user
   insertUser.run(
@@ -40,8 +39,7 @@ async function seed() {
     'alice@company.com',
     employeePassword,
     'EMPLOYEE',
-    'Engineering'
-  );
+    'Engineering');
 
   // Additional employees for different departments
   insertUser.run(
@@ -49,16 +47,14 @@ async function seed() {
     'bob@company.com',
     employeePassword,
     'EMPLOYEE',
-    'Engineering'
-  );
+    'Engineering');
 
   insertUser.run(
     'Charlie Davis',
     'charlie@company.com',
     employeePassword,
     'EMPLOYEE',
-    'Marketing'
-  );
+    'Marketing');
 
   // Manager user
   insertUser.run(
@@ -66,16 +62,14 @@ async function seed() {
     'diana@company.com',
     managerPassword,
     'MANAGER',
-    'Engineering'
-  );
+    'Engineering');
 
   insertUser.run(
     'Eve Martinez',
     'eve@company.com',
     managerPassword,
     'MANAGER',
-    'Marketing'
-  );
+    'Marketing');
 
   // HR Admin user
   insertUser.run(
@@ -83,8 +77,7 @@ async function seed() {
     'frank@company.com',
     hrAdminPassword,
     'HR_ADMIN',
-    'Human Resources'
-  );
+    'Human Resources');
 
   console.info('✓ Sample users created');
 
@@ -178,6 +171,10 @@ async function seed() {
 try {
   await seed();
 } catch (error) {
-  console.error('Seed failed:', error);
+  let details = String(error);
+  if (error instanceof Error) {
+    details = error.stack ?? error.message;
+  }
+  process.stderr.write(`Seed failed: ${details}\n`);
   process.exit(1);
 }
