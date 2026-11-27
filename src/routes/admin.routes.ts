@@ -34,11 +34,10 @@ admin.patch('/users/:id/status', async c => {
 
   return c.json({
     success: true,
-    user: updatedUser,
-  });
+    user: updatedUser });
 });
 
-admin.get('/feedback/all', (c) => {
+admin.get('/feedback/all', c => {
   const feedbackPosts = getAllFeedbackForAdmin();
   return c.json({ feedback: feedbackPosts });
 });

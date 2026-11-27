@@ -8,7 +8,7 @@ import { authenticate } from '../middleware/auth';
 
 const auth = new Hono();
 
-auth.post('/register', async (c) => {
+auth.post('/register', async c => {
   const body = await c.req.json();
   const validation = registerSchema.safeParse(body);
 
@@ -24,24 +24,21 @@ auth.post('/register', async (c) => {
   const token = await generateToken({
     userId: user.id,
     role: user.role,
-    department: user.department,
-  });
+    department: user.department });
 
   setCookie(c, 'authToken', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
     maxAge: 86400,
-    path: '/',
-  });
+    path: '/' });
 
   return c.json({
     success: true,
-    user: toSafeUser(user),
-  });
+    user: toSafeUser(user) });
 });
 
-auth.post('/login', async (c) => {
+auth.post('/login', async c => {
   const body = await c.req.json();
   const validation = loginSchema.safeParse(body);
 
@@ -68,32 +65,28 @@ auth.post('/login', async (c) => {
   const token = await generateToken({
     userId: user.id,
     role: user.role,
-    department: user.department,
-  });
+    department: user.department });
 
   setCookie(c, 'authToken', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
     maxAge: 86400,
-    path: '/',
-  });
+    path: '/' });
 
   return c.json({
     success: true,
-    user: toSafeUser(user),
-  });
+    user: toSafeUser(user) });
 });
 
-auth.post('/logout', (c) => {
+auth.post('/logout', c => {
   deleteCookie(c, 'authToken', {
-    path: '/',
-  });
+    path: '/' });
 
   return c.json({ success: true, message: 'Logged out successfully' });
 });
 
-auth.get('/me', authenticate, (c) => {
+auth.get('/me', authenticate, c => {
   const user = c.get('user');
   return c.json({ user: toSafeUser(user) });
 });

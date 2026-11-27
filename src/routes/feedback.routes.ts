@@ -4,8 +4,7 @@ import {
   createFeedback,
   getFeedbackVisibleToUser,
   getFeedbackById,
-  getFeedbackByDepartment,
-} from '../services/feedback.service';
+  getFeedbackByDepartment } from '../services/feedback.service';
 import { deleteImage, getStoredImage, saveOptionalImage } from '../services/image.service';
 import { limitUploadSize } from '../middleware/upload';
 import { createFeedbackSchema } from '../models/types';
@@ -16,7 +15,7 @@ const feedback = new Hono();
 
 feedback.use('*', authenticate);
 
-feedback.post('/', limitUploadSize, async (c) => {
+feedback.post('/', limitUploadSize, async c => {
   const user = c.get('user');
   const { fields, image } = await parseSubmissionBody(c);
 
@@ -46,8 +45,7 @@ feedback.post('/', limitUploadSize, async (c) => {
 
     return c.json({
       success: true,
-      feedback: feedbackPost,
-    });
+      feedback: feedbackPost });
   } catch (error) {
     if (imagePath) {
       await deleteImage(imagePath);
@@ -56,7 +54,7 @@ feedback.post('/', limitUploadSize, async (c) => {
   }
 });
 
-feedback.get('/', (c) => {
+feedback.get('/', c => {
   const user = c.get('user');
   const feedbackPosts = getFeedbackVisibleToUser(user);
   return c.json({ feedback: feedbackPosts });
