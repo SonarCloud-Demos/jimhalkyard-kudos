@@ -1,6 +1,9 @@
-import { Database } from 'bun:sqlite';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+type Database = InstanceType<typeof import('bun:sqlite').Database>;
+
+const { Database } = await import('bun:sqlite');
 
 let db: Database | null = null;
 
