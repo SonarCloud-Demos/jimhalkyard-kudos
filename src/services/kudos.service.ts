@@ -6,7 +6,8 @@ import { getUserById } from './user.service';
 export function createKudos(
   authorId: number,
   recipientId: number,
-  message: string
+  message: string,
+  imagePath: string | null = null
 ): KudosPost {
   const db = getDatabase();
 
@@ -16,10 +17,10 @@ export function createKudos(
   }
 
   const stmt = db.prepare(
-    'INSERT INTO kudos_posts (author_id, recipient_id, message) VALUES (?, ?, ?)'
+    'INSERT INTO kudos_posts (author_id, recipient_id, message, image_path) VALUES (?, ?, ?, ?)'
   );
 
-  const result = stmt.run(authorId, recipientId, message);
+  const result = stmt.run(authorId, recipientId, message, imagePath);
 
   const kudos = db
     .prepare('SELECT * FROM kudos_posts WHERE id = ?')
@@ -100,8 +101,7 @@ export function getKudosGivenByUser(userId: number): KudosPostWithNames[] {
       JOIN users a ON k.author_id = a.id
       JOIN users r ON k.recipient_id = r.id
       WHERE k.author_id = ? AND k.is_public = 1
-      ORDER BY k.created_at DESC`
-    )
+      ORDER BY k.created_at DESC`)
     .all(userId) as KudosPostWithNames[];
 
   return kudos;
