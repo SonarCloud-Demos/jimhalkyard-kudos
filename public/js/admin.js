@@ -98,6 +98,7 @@ async function toggleUserStatus(userId, isActive) {
       alert(data.error || `Failed to ${action} user`);
     }
   } catch (error) {
+    console.error(`Failed to ${action} user:`, error);
     alert('Network error. Please try again.');
   }
 }
