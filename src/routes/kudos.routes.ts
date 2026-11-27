@@ -6,8 +6,7 @@ import {
   getAllPublicKudos,
   getKudosById,
   getKudosReceivedByUser,
-  getKudosGivenByUser,
-} from '../services/kudos.service';
+  getKudosGivenByUser } from '../services/kudos.service';
 import { deleteImage, getStoredImage, saveOptionalImage } from '../services/image.service';
 import { createKudosSchema } from '../models/types';
 import { ForbiddenError, NotFoundError, ValidationError } from '../utils/errors';
@@ -17,7 +16,7 @@ const kudos = new Hono();
 
 kudos.use('*', authenticate);
 
-kudos.post('/', limitUploadSize, async (c) => {
+kudos.post('/', limitUploadSize, async c => {
   const user = c.get('user');
   const { fields, image } = await parseSubmissionBody(c);
 
@@ -41,8 +40,7 @@ kudos.post('/', limitUploadSize, async (c) => {
 
     return c.json({
       success: true,
-      kudos: kudosPost,
-    });
+      kudos: kudosPost });
   } catch (error) {
     if (imagePath) {
       await deleteImage(imagePath);
@@ -51,24 +49,24 @@ kudos.post('/', limitUploadSize, async (c) => {
   }
 });
 
-kudos.get('/', (c) => {
+kudos.get('/', c => {
   const kudosPosts = getAllPublicKudos();
   return c.json({ kudos: kudosPosts });
 });
 
-kudos.get('/my-received', (c) => {
+kudos.get('/my-received', c => {
   const user = c.get('user');
   const kudosPosts = getKudosReceivedByUser(user.id);
   return c.json({ kudos: kudosPosts });
 });
 
-kudos.get('/my-given', (c) => {
+kudos.get('/my-given', c => {
   const user = c.get('user');
   const kudosPosts = getKudosGivenByUser(user.id);
   return c.json({ kudos: kudosPosts });
 });
 
-kudos.get('/:id/image', async (c) => {
+kudos.get('/:id/image', async c => {
   const user = c.get('user');
   const id = Number.parseInt(c.req.param('id'), 10);
 
@@ -94,9 +92,7 @@ kudos.get('/:id/image', async (c) => {
     headers: {
       'Content-Type': contentType,
       'X-Content-Type-Options': 'nosniff',
-      'Cache-Control': 'private, no-cache',
-    },
-  });
+      'Cache-Control': 'private, no-cache' } });
 });
 
 export default kudos;
