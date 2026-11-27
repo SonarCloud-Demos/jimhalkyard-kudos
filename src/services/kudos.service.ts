@@ -20,11 +20,9 @@ export function createKudos(
 
   const result = stmt.run(authorId, recipientId, message, imagePath);
 
-  const kudos = db
+  return db
     .prepare('SELECT * FROM kudos_posts WHERE id = ?')
     .get(result.lastInsertRowid) as KudosPost;
-
-  return kudos;
 }
 
 export function getAllPublicKudos(): KudosPostWithNames[] {
@@ -82,7 +80,7 @@ export function getKudosReceivedByUser(userId: number): KudosPostWithNames[] {
 export function getKudosGivenByUser(userId: number): KudosPostWithNames[] {
   const db = getDatabase();
 
-  const kudos = db
+  return db
     .prepare(
       `SELECT
         k.*,
@@ -94,6 +92,4 @@ export function getKudosGivenByUser(userId: number): KudosPostWithNames[] {
       WHERE k.author_id = ? AND k.is_public = 1
       ORDER BY k.created_at DESC`)
     .all(userId) as KudosPostWithNames[];
-
-  return kudos;
 }

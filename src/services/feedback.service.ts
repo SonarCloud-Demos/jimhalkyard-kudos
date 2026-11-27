@@ -30,11 +30,9 @@ export function createFeedback(
     visibility,
     imagePath);
 
-  const feedback = db
+  return db
     .prepare('SELECT * FROM feedback_posts WHERE id = ?')
     .get(result.lastInsertRowid) as FeedbackPost;
-
-  return feedback;
 }
 
 export function getFeedbackVisibleToUser(user: User): FeedbackPostWithAuthor[] {
@@ -68,13 +66,9 @@ export function getFeedbackVisibleToUser(user: User): FeedbackPostWithAuthor[] {
   const feedbacks = db.prepare(query).all(...params) as FeedbackPostWithAuthor[];
 
   // Hide author information for anonymous feedback (except for HR admins)
-  return feedbacks.map((feedback) => {
+  return feedbacks.map(feedback => {
     if (shouldHideAuthor(user, feedback)) {
-      return {
-        ...feedback,
-        author_id: null,
-        author_name: null,
-      };
+      return { ...feedback, author_id: null, author_name: null };
     }
     return feedback;
   });
@@ -145,11 +139,11 @@ export function getFeedbackByDepartment(
     query += ' ORDER BY f.created_at DESC';
   } else if (user.role === 'MANAGER') {
     // Managers see PUBLIC + MANAGER_ONLY for their own department
-    if (user.department !== department) {
+    if (user.department === department) {
+      query += ` AND (f.visibility = 'PUBLIC' OR f.visibility = 'MANAGER_ONLY') ORDER BY f.created_at DESC`;
+    } else {
       // Can't see other departments' manager-only feedback
       query += ` AND f.visibility = 'PUBLIC' ORDER BY f.created_at DESC`;
-    } else {
-      query += ` AND (f.visibility = 'PUBLIC' OR f.visibility = 'MANAGER_ONLY') ORDER BY f.created_at DESC`;
     }
   } else {
     // Employees see only PUBLIC
@@ -159,13 +153,9 @@ export function getFeedbackByDepartment(
   const feedbacks = db.prepare(query).all(...params) as FeedbackPostWithAuthor[];
 
   // Hide author information for anonymous feedback (except for HR admins)
-  return feedbacks.map((feedback) => {
+  return feedbacks.map(feedback => {
     if (shouldHideAuthor(user, feedback)) {
-      return {
-        ...feedback,
-        author_id: null,
-        author_name: null,
-      };
+      return { ...feedback, author_id: null, author_name: null };
     }
     return feedback;
   });
