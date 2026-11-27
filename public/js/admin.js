@@ -99,7 +99,7 @@ async function toggleUserStatus(userId, isActive) {
     }
   } catch (error) {
     console.error(`Failed to ${action} user:`, error);
-    alert('Network error. Please try again.');
+    alert(error.message || 'Network error. Please try again.');
   }
 }
 
