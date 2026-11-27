@@ -14,7 +14,7 @@ function addMissingImageColumns(database: Database): void {
   for (const table of IMAGE_TABLES) {
     const columns = database.query(`PRAGMA table_info(${table})`).all() as { name: string }[];
 
-    if (!columns.some((column) => column.name === 'image_path')) {
+    if (!columns.some(column => column.name === 'image_path')) {
       database.exec(`ALTER TABLE ${table} ADD COLUMN image_path TEXT`);
     }
   }
