@@ -99,7 +99,7 @@
       window.themeManager.init();
     }
   </script>
-  <script>
+  <script type="module">
     async function loadDashboard() {
       const user = await checkAuth();
       if (!user) return;
@@ -135,7 +135,7 @@
       window.location.href = '/';
     }
 
-    loadDashboard();
+    await loadDashboard();
   </script>
 </body>
 </html>

@@ -46,6 +46,30 @@ function formatDate(dateString) {
   }
 }
 
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set(['image/png', 'image/jpeg']);
+
+// Returns an error message, or null when the file is acceptable (or absent).
+function validateImageFile(file) {
+  if (!file) {
+    return null;
+  }
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+    return 'Only PNG and JPG images are allowed';
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    return 'Image must not exceed 2MB';
+  }
+  return null;
+}
+
+function renderCardImage(basePath, id, hasImage, altText) {
+  if (!hasImage) {
+    return '';
+  }
+  return `<img class="card-image" src="${basePath}/${id}/image" alt="${altText}" loading="lazy">`;
+}
+
 function showError(elementId, message) {
   const element = document.getElementById(elementId);
   if (element) {

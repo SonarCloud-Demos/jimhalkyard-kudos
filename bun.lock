@@ -5,7 +5,7 @@
     "": {
       "name": "kudos-portal",
       "dependencies": {
-        "hono": "^4.13.7",
+        "hono": "^4.13.16",
         "jose": "^6.2.12",
         "zod": "^4.5.4",
       },
@@ -21,7 +21,7 @@
 
     "bun-types": ["bun-types@1.4.1", "https://repox.jfrog.io/artifactory/api/npm/npm/bun-types/-/bun-types-1.4.1.tgz", { "dependencies": { "@types/node": "*" } }, "sha512-loKuVrAFZKfEv+JvWkHRS9GW5IqLuLRjVXN9p+vZvBN86O5hf/pBZQ5hSoyipsrMmWObZBDvWnlmKvjKTM0PdA=="],
 
-    "hono": ["hono@4.13.7", "https://repox.jfrog.io/artifactory/api/npm/npm/hono/-/hono-4.13.7.tgz", {}, "sha512-c8/gF9ac8Y78/agExVocyLevgR+JlpNB444Py0FSX8pJoPdYUfUzRcXtYEYGwt6l19qIlVZPN5Mfsw9jFShmQQ=="],
+    "hono": ["hono@4.13.23", "https://repox.jfrog.io/artifactory/api/npm/npm/hono/-/hono-4.13.23.tgz", {}, "sha512-OS90dj7dcsftEEWCOef8jRbnHE5lbrOq0hNRqjSyPsOnaGZvvfof1KS05hQNb4kUOCfDq1mG3PmHoX37DMnHQg=="],
 
     "jose": ["jose@6.2.12", "https://repox.jfrog.io/artifactory/api/npm/npm/jose/-/jose-6.2.12.tgz", {}, "sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw=="],
 

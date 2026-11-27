@@ -208,8 +208,12 @@ function initThemeToggle() {
   list.forEach(option => {
     option.tabIndex = option.getAttribute('aria-checked') === 'true' ? 0 : -1;
     option.addEventListener('keydown', (event) => {
-      const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
-        : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
+      let step = 0;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        step = 1;
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        step = -1;
+      }
       if (!step) return;
       event.preventDefault();
       const next = list[(list.indexOf(option) + step + list.length) % list.length];

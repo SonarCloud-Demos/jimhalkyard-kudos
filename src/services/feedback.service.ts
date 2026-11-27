@@ -8,11 +8,12 @@ export function createFeedback(
   targetDepartment: string,
   message: string,
   isAnonymous: boolean,
-  visibility: FeedbackVisibility): FeedbackPost {
+  visibility: FeedbackVisibility,
+  imagePath: string | null = null): FeedbackPost {
   const db = getDatabase();
 
   const stmt = db.prepare(
-    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility) VALUES (?, ?, ?, ?, ?)'
+    'INSERT INTO feedback_posts (author_id, target_department, message, is_anonymous, visibility, image_path) VALUES (?, ?, ?, ?, ?, ?)'
   );
 
   const result = stmt.run(
@@ -20,7 +21,8 @@ export function createFeedback(
     targetDepartment,
     message,
     isAnonymous ? 1 : 0,
-    visibility
+    visibility,
+    imagePath
   );
 
   const feedback = db
