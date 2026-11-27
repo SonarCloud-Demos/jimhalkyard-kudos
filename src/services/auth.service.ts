@@ -19,20 +19,20 @@ export async function verifyPassword(
 }
 
 export async function generateToken(payload: JWTPayload): Promise<string> {
-  const token = await new SignJWT({ ...payload })
+  return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('24h')
     .sign(JWT_SECRET);
-
-  return token;
 }
 
 export async function verifyToken(token: string): Promise<JWTPayload> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
     return payload as unknown as JWTPayload;
-  } catch (error) {
+  } catch {
+    // The original JWT error is intentionally not surfaced; a generic
+    // unauthorized error is thrown instead to avoid leaking token details.
     throw new UnauthorizedError('Invalid or expired token');
   }
 }
@@ -67,11 +67,7 @@ export function shouldHideAuthor(user: User, feedback: FeedbackPost): boolean {
 }
 
 export function requireRole(userRole: UserRole, requiredRole: UserRole): boolean {
-  const roleHierarchy: Record<UserRole, number> = {
-    EMPLOYEE: 1,
-    MANAGER: 2,
-    HR_ADMIN: 3,
-  };
+  const roleHierarchy: Record<UserRole, number> = { EMPLOYEE: 1, MANAGER: 2, HR_ADMIN: 3 };
 
   return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
 }
