@@ -43,7 +43,7 @@ export function getFeedbackVisibleToUser(user: User): FeedbackPostWithAuthor[] {
     LEFT JOIN users u ON f.author_id = u.id
     WHERE 1=1
   `;
-  const params: any[] = [];
+  const params: string[] = [];
 
   if (user.role === 'HR_ADMIN') {
     // HR admins see everything
@@ -138,7 +138,7 @@ export function getFeedbackByDepartment(
     LEFT JOIN users u ON f.author_id = u.id
     WHERE f.target_department = ?
   `;
-  const params: any[] = [department];
+  const params: string[] = [department];
 
   if (user.role === 'HR_ADMIN') {
     // HR admins see everything for the department

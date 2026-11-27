@@ -33,7 +33,7 @@ app.route('/api/feedback', feedbackRoutes);
 app.route('/api/admin', adminRoutes);
 
 app.onError((err, c) => {
-  console.error('Error:', err);
+  process.stderr.write(`Error: ${err.stack ?? String(err)}\n`);
 
   if (err instanceof AppError) {
     return c.json(
