@@ -129,7 +129,7 @@ document.getElementById('feedback-form').addEventListener('submit', async (e) =>
     }
   } catch (error) {
     console.error('Failed to submit feedback:', error);
-    showError('modal-error', 'Network error. Please try again.');
+    showError('modal-error', error.message || 'Network error. Please try again.');
   }
 });
 
