@@ -103,6 +103,12 @@ export async function deleteImage(filename: string): Promise<void> {
   try {
     await unlink(resolveStoredPath(filename));
   } catch (error) {
-    console.error('Failed to delete image:', error);
+    let details: string;
+    if (error instanceof Error && error.stack) {
+      details = error.stack;
+    } else {
+      details = String(error);
+    }
+    process.stderr.write(`Failed to delete image: ${details}\n`);
   }
 }
