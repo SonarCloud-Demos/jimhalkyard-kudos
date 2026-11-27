@@ -2,7 +2,7 @@
 title: Sensitive change summary
 description: Provide impact summary and testing suggestions for changes to sensitive paths
 type: automation
-when: Changes affect files under src (authorisation, schema, secrets handling)
+when: Changes affect src/routes/, src/middleware/, src/services/auth.service.ts, src/db/, or any path containing auth/, secrets/ or payments/ (authorisation, schema, secrets handling)
 actions: Post one advisory comment summarising impact, suggested tests and reviewers
 ---
 
