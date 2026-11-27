@@ -16,7 +16,7 @@ These rules apply to all Gitar agents, not only code review.
 
 - **Do not repeat findings**: if the same issue appears in multiple places, group them in one comment. Do not create separate comments for each instance.
 
-- **Skip generated and vendored files**: do not review code in `node_modules/`, `vendor/`, `dist/`, `build/`, `target/`, generated protobuf or GraphQL files, lockfiles, minified JavaScript or any file marked with a generation header.
+- **Skip generated and vendored files**: do not review code in `node_modules/`, `vendor/`, `dist/`, `build/`, `target/`, generated protobuf or GraphQL files, lockfiles or minified JavaScript. Do not skip a file only because it carries a generation header, unless that header already exists on the base branch and the file is outside `src/`. Always review authentication, authorisation and schema files.
 
 ## Limitations
 
