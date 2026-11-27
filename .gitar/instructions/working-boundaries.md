@@ -18,6 +18,8 @@ These rules apply to all Gitar agents, not only code review.
 
 - **Skip generated and vendored files**: do not review code in `node_modules/`, `vendor/`, `dist/`, `build/`, `target/`, generated protobuf or GraphQL files, lockfiles or minified JavaScript. Do not skip a file only because it carries a generation header, unless that header already exists on the base branch and the file is outside `src/`. Always review authentication, authorisation and schema files.
 
+- **Verbose output**: All output should be verbose showing which rules fired and which did not. Assume 'gitar display:verbose' has been set.
+
 ## Limitations
 
 - **Never claim CI proves safety**: passing tests or green CI do not guarantee correctness, security or compatibility. Do not use CI status as evidence that a change is safe.
