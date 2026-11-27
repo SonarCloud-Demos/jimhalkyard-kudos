@@ -16,6 +16,16 @@ async function loadAdmin() {
   await loadAllFeedback();
 }
 
+function renderUserActionCell(user, currentUser) {
+  if (user.id === currentUser.id) {
+    return '<em>You</em>';
+  }
+  if (user.is_active) {
+    return `<button class="button button-error" onclick="toggleUserStatus(${user.id}, false)">Deactivate</button>`;
+  }
+  return `<button class="button button-success" onclick="toggleUserStatus(${user.id}, true)">Activate</button>`;
+}
+
 async function loadUsers() {
   try {
     const response = await fetch('/api/admin/users');
@@ -53,12 +63,7 @@ async function loadUsers() {
                 </span>
               </td>
               <td>
-                ${user.id === currentUser.id
-                  ? '<em>You</em>'
-                  : user.is_active
-                    ? `<button class="button button-error" onclick="toggleUserStatus(${user.id}, false)">Deactivate</button>`
-                    : `<button class="button button-success" onclick="toggleUserStatus(${user.id}, true)">Activate</button>`
-                }
+                ${renderUserActionCell(user, currentUser)}
               </td>
             </tr>
           `).join('')}
