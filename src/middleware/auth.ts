@@ -51,8 +51,7 @@ export function requireRole(requiredRole: UserRole) {
     const roleHierarchy: Record<UserRole, number> = {
       EMPLOYEE: 1,
       MANAGER: 2,
-      HR_ADMIN: 3,
-    };
+      HR_ADMIN: 3 };
 
     if (roleHierarchy[user.role] < roleHierarchy[requiredRole]) {
       throw new ForbiddenError('Insufficient permissions');
