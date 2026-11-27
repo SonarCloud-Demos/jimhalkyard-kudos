@@ -14,20 +14,17 @@ async function seed() {
   const employeePassword = await Bun.password.hash('employee123', {
     algorithm: 'argon2id',
     memoryCost: 65536,
-    timeCost: 3,
-  });
+    timeCost: 3 });
 
   const managerPassword = await Bun.password.hash('manager123', {
     algorithm: 'argon2id',
     memoryCost: 65536,
-    timeCost: 3,
-  });
+    timeCost: 3 });
 
   const hrAdminPassword = await Bun.password.hash('hradmin123', {
     algorithm: 'argon2id',
     memoryCost: 65536,
-    timeCost: 3,
-  });
+    timeCost: 3 });
 
   // Insert sample users
   const insertUser = db.prepare(
